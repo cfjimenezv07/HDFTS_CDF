@@ -1,0 +1,12 @@
+name: Shiny_App_CDF
+title: Shiny_App_CDF
+username: cfjimenezv
+account: cfjimenezv
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 14277756
+bundleId: 9965885
+url: https://cfjimenezv.shinyapps.io/Shiny_App_CDF/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
