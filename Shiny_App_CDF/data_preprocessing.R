@@ -6,7 +6,7 @@ names <- list( Japan = names.Japan)
 
 get_pfe_dataset <- function(.country, .method, .metric, .gender, .pca) {
   #reading the data
-  path <- paste0("./datasets_shiny_app/PFE/",.country, "/", 
+  path <- paste0("./datasets_shiny_app2/PFE/",.country, "/", 
                  paste(.method, .metric, .gender, .pca, sep = "_"), ".rds")
   df <- readRDS(path)
   colnames(df) <- names[[.country]] #labeling the departments or states
@@ -15,7 +15,7 @@ get_pfe_dataset <- function(.country, .method, .metric, .gender, .pca) {
   df$method <- .method
   df$pca <- .pca
   df$metric <- .metric
-  df$h <- 1:16
+  df$h <- 1:17
   df$gender <- .gender
   df$country <- .country
   #pivoting dataset
@@ -41,7 +41,7 @@ pfe.result <- mapply(get_pfe_dataset, .country = lista$country, .method = lista$
   mutate(value = round(value, 4), method = method)
 
 View(pfe.result)
-# saveRDS(pfe.result, "./pfe_data.rds")
+saveRDS(pfe.result, "./pfe_data.rds")
 
 
 
@@ -57,7 +57,7 @@ aux <- function(i, df, .country, .gender, .method, .coverage, .pca) {
   temp <- as.data.frame(temp)
   temp$method <- .method 
   temp$pca <- .pca
-  temp$h <- 1:15
+  temp$h <- 1:16
   temp$coverage <- .coverage
   temp$gender <- .gender
   temp$country <- .country
@@ -69,7 +69,7 @@ aux <- function(i, df, .country, .gender, .method, .coverage, .pca) {
 
 get_ife_dataset <- function(.country, .method, .gender, .coverage, .pca) {
   #reading the data
-  path <- paste0("./datasets_shiny_app/IFE/",.country, "/", 
+  path <- paste0("./datasets_shiny_app2/IFE/",.country, "/", 
                  paste(.method, .gender, .pca,.coverage, sep = "_"), ".rds")
   df <- readRDS(path)
   do.call(rbind.data.frame, 

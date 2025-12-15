@@ -50,11 +50,11 @@ gen_ife_table <- function(.country, .division, .gender, .coverage, .pca) {
   last.row3  <- format(round(colMeans(temp[7:12,]), 3), nsmall = 2)
   last.row4 <- format(round(apply(temp[7:12,],2,median), 3), nsmall = 2)
   
-  last.row5  <- format(round(colMeans(temp[13:15,]), 3), nsmall = 2)
-  last.row6 <- format(round(apply(temp[13:15,],2,median), 3), nsmall = 2)
+  last.row5  <- format(round(colMeans(temp[13:16,]), 3), nsmall = 2)
+  last.row6 <- format(round(apply(temp[13:16,],2,median), 3), nsmall = 2)
   
   
-  temp[,-c(4, 7, 10, 13, 16)] <- temp[,-c(4, 7, 10, 13, 16)]  %>%
+  temp[,-c(4, 7, 10, 13, 17)] <- temp[,-c(4, 7, 10, 13, 17)]  %>%
     apply(2, function(x) format(round(x, 3), nsmall = 2)) %>% 
     as.data.frame()
   temp$h <- as.numeric(temp$h)
@@ -65,16 +65,16 @@ gen_ife_table <- function(.country, .division, .gender, .coverage, .pca) {
   last.row5[1]  <- "Mean"
   last.row6[1] <- "Median"
   
-  last.row1[c(4, 7, 10, 13, 16)] <- as.integer(last.row1[c(4, 7, 10, 13, 16)])
-  last.row2[c(4, 7, 10, 13, 16)] <- as.integer(last.row2[c(4, 7, 10, 13, 16)])
-  last.row3[c(4, 7, 10, 13, 16)] <- as.integer(last.row3[c(4, 7, 10, 13, 16)])
-  last.row4[c(4, 7, 10, 13, 16)] <- as.integer(last.row4[c(4, 7, 10, 13, 16)])
-  last.row5[c(4, 7, 10, 13, 16)] <- as.integer(last.row5[c(4, 7, 10, 13, 16)])
-  last.row6[c(4, 7, 10, 13, 16)] <- as.integer(last.row6[c(4, 7, 10, 13, 16)])
+  last.row1[c(4, 7, 10, 13, 17)] <- as.integer(last.row1[c(4, 7, 10, 13, 17)])
+  last.row2[c(4, 7, 10, 13, 17)] <- as.integer(last.row2[c(4, 7, 10, 13, 17)])
+  last.row3[c(4, 7, 10, 13, 17)] <- as.integer(last.row3[c(4, 7, 10, 13, 17)])
+  last.row4[c(4, 7, 10, 13, 17)] <- as.integer(last.row4[c(4, 7, 10, 13, 17)])
+  last.row5[c(4, 7, 10, 13, 17)] <- as.integer(last.row5[c(4, 7, 10, 13, 17)])
+  last.row6[c(4, 7, 10, 13, 17)] <- as.integer(last.row6[c(4, 7, 10, 13, 17)])
   
   rbind(temp[1:6, ], last.row1,last.row2, 
         temp[7:12, ], last.row3,last.row4,
-        temp[13:15, ], last.row5,last.row6)
+        temp[13:16, ], last.row5,last.row6)
 }
 
 
