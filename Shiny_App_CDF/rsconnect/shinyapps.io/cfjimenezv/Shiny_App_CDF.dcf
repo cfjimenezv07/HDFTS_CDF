@@ -5,7 +5,7 @@ account: cfjimenezv
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 14277756
-bundleId: 11325393
+bundleId: 11345891
 url: https://cfjimenezv.shinyapps.io/Shiny_App_CDF/
 version: 1
 asMultiple: FALSE

@@ -58,22 +58,22 @@ Ui <- fluidPage(
              )),
            div(
              style = "display: flex; justify-content: center; align-items: center; padding-top:5%",
-             h4(
-               "Authors",
-               br(),
-               br(),
-               "Han Lin Shang",
-               br(),
-               "Department of Actuarial Studies and Business Analytics",
-               "Macquarie University",
-               br(),
-               br(),
-               "Cristian F. Jiménez-Varón",
-               br(),
-               "University of York",
-               br(),
-               "Department of Mathematics",
-             )
+             # h4(
+             #   "Authors",
+             #   br(),
+             #   br(),
+             #   "Han Lin Shang",
+             #   br(),
+             #   "Department of Actuarial Studies and Business Analytics",
+             #   "Macquarie University",
+             #   br(),
+             #   br(),
+             #   "Cristian F. Jiménez-Varón",
+             #   br(),
+             #   "University of York",
+             #   br(),
+             #   "Department of Mathematics",
+             # )
            )
     ),
     column(4,
