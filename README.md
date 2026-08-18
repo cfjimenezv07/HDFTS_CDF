@@ -96,5 +96,5 @@ After generating and storing the point and interval results in `results/`, run t
 
 <br />
 <div align="center">
-  <a href="https://github.com/cfjimenezv07/FANOVA_FFM"><strong>Explore R Code Repository »</strong></a>
+  <a href="https://github.com/cfjimenezv07/HDFTS_CDF"><strong>Explore R Code Repository »</strong></a>
 </div>
