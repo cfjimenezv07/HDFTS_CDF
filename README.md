@@ -15,6 +15,12 @@
 
 ---
 
+## Software Dependencies & Environment
+
+This replication package was tested and verified under **R version 4.6.0**. To ensure full computational reproducibility, package management and exact package versions are specified via `load_packages.R`.
+
+---
+
 ## Code Workflow & Script Execution Guide
 
 To reproduce the analysis, tables, and figures from the paper, execute the R scripts in the following step-by-step order.
