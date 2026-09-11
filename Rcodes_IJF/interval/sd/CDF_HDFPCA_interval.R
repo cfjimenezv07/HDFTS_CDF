@@ -4,8 +4,8 @@
 source("load_packages.R")
 
 dir_source  <- here("auxiliary_source")
-dir_results <- here("results", "Results_Interval", "sd")
-dir.shiny2  <- here("results", "Shiny_App", "datasets_shiny_app", "IFE")
+dir.results <- paste0(here("results", "Results_Interval", "sd"), "/")
+dir.shiny2  <- paste0(here("Shiny_App", "datasets_shiny_app", "IFE"), "/")
 
 # Load dependencies using relative pathing
 source(file.path(dir_source, "auxiliary_interval.R"))

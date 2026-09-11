@@ -3,8 +3,8 @@
 source("load_packages.R")
 
 # Dynamic Directories
-dir.d       <- here("data", "updated_data")
-dir.results <- here("results", "Results_Point")
+dir.d       <- here("data", "updated_data/")
+dir.results <- here("results")
 dir.p       <- here("results", "Plots")
 dir.aux     <- here("auxiliary_source")
 
@@ -183,3 +183,4 @@ matplot(
   xlab = "Age", ylab = "ex"
 )
 dev.off()
+

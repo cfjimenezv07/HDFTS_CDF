@@ -163,8 +163,10 @@ fore_national_cdf <- function(data_set, ncomp_method, fh, fmethod)
   {
     warning("The number of components is required.")
   }
-  data_cumsum_logit_fore = forecast(object = ftsm(fts(ages[1:110], t(data_cumsum_logit)), order = ncomp), 
-                                    h = fh, method = fmethod, B = 399)
+  data_cumsum_logit_fore = suppressWarnings(
+    forecast(object = ftsm(fts(ages[1:110], t(data_cumsum_logit)), order = ncomp), 
+             h = fh, method = fmethod, B = 399)
+  )
   
   # h-step-ahead mean forecast
   
@@ -235,8 +237,9 @@ MFTS_model <- function(data_input, ncomp_method, fh, fore_method)
     {
       warning("The number of components is required.")
     }
-    fore_ftsm = forecast(ftsm(fts(1:nrow(comb_object), comb_object), order = ncomp), h = fh, 
-                         method = fore_method)
+    fore_ftsm = suppressWarnings(forecast(ftsm(fts(1:nrow(comb_object), comb_object), order = ncomp), h = fh, 
+                                          method = fore_method)
+    )
     res_fore = as.matrix(fore_ftsm$mean$y[,fh] * do.call(c, sd_object) + do.call(c, rowmeans_object))
     return(res_fore)
 }
@@ -808,7 +811,7 @@ MLFTS_model<- function(data_input, aux_var, ncomp_method, fh, fore_method)
   {
     ncomp_aggregate = 6
   }
-  ftsm_aggregate = ftsm(fts(1:n_age, aggregate_data), order = ncomp_aggregate)
+  ftsm_aggregate = suppressWarnings(ftsm(fts(1:n_age, aggregate_data), order = ncomp_aggregate))
   
   # calculate sum of lambda_k
   sum_lambda_k = sum(eigen_value_aggregate[1:ncomp_aggregate])
@@ -851,7 +854,7 @@ MLFTS_model<- function(data_input, aux_var, ncomp_method, fh, fore_method)
   ftsm_resi = list()
   for(iw in 1:n_pop)
   {
-    ftsm_resi[[iw]] = ftsm(fts(1:n_age, data_residual[,,iw]), order = ncomp_resi[iw])
+    ftsm_resi[[iw]] = suppressWarnings(ftsm(fts(1:n_age, data_residual[,,iw]), order = ncomp_resi[iw]))
     rm(iw)
   }
   

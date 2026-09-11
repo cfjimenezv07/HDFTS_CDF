@@ -6,7 +6,7 @@
 source("load_packages.R")
 
 # Dynamic Directories
-dir.d       <- here("data", "updated_data")
+dir.d       <- here("data", "updated_data/")
 dir.results <- here("results")
 dir.p       <- here("results", "Plots")
 dir.aux     <- here("auxiliary_source")

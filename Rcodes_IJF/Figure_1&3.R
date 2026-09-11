@@ -1,9 +1,9 @@
 source("load_packages.R")
 
 # Subdirectories
-dir.data    <- here("data")
+dir.data    <- here("data/")
 dir.aux     <- here("auxiliary_source")
-dir.results <- here("results")
+dir.results <- here("results/Results_Point/")
 dir.plots   <- here("results", "Plots")
 
 # Create output directories if they do not exist
@@ -65,12 +65,12 @@ dev.off()
 # image plots (Kullback-Leibler divergence).  Figure 3 in the paper
 ############################################################################
 
-female_prefecture_dx <- readRDS(paste0(dir.results, "female_prefecture_dx.rds"))
-male_prefecture_dx   <- readRDS(paste0(dir.results, "male_prefecture_dx.rds"))
-total_prefecture_dx  <- readRDS(paste0(dir.results, "total_prefecture_dx.rds"))
-Japan_female_pop <- readRDS(paste0(dir.results, "Japan_female_pop.rds"))
-Japan_male_pop   <- readRDS(paste0(dir.results, "Japan_male_pop.rds"))
-Japan_total_pop   <- readRDS(paste0(dir.results, "Japan_total_pop.rds"))
+female_prefecture_dx <- readRDS(paste0(dir.data, "female_prefecture_dx.rds"))
+male_prefecture_dx   <- readRDS(paste0(dir.data, "male_prefecture_dx.rds"))
+total_prefecture_dx  <- readRDS(paste0(dir.data, "total_prefecture_dx.rds"))
+Japan_female_pop <- readRDS(paste0(dir.data, "Japan_female_pop.rds"))
+Japan_male_pop   <- readRDS(paste0(dir.data, "Japan_male_pop.rds"))
+Japan_total_pop   <- readRDS(paste0(dir.data, "Japan_total_pop.rds"))
 
 ages <- 0:110
 n_age <- length(ages)

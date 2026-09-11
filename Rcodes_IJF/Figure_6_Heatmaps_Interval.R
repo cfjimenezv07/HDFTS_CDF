@@ -110,23 +110,23 @@ generate_interval_lists <- function(metric_idx) {
       UFTS_EVR   = load_interval_res("int_fore_subnational_err_F_EVR_ETS.rds", metric_idx),
       MFTS_EVR   = load_interval_res("MFTS_int_fore_subnational_err_F_EVR_ETS.rds", metric_idx),
       MLFTS_EVR  = load_interval_res("MLFTS_int_fore_subnational_err_F_EVR_ETS.rds", metric_idx),
-      FANOVA_EVR = load_interval_res("int_fore_subnational_err_F_EVR_ETS_FANOVA.rds", metric_idx),
+      FANOVA_EVR = load_interval_res("FANOVA_int_fore_subnational_err_F_EVR_ETS.rds", metric_idx),
       HDFPCA     = load_interval_res("hdfpca_int_fore_subnational_err_F_EVR_ETS_CDF.rds", metric_idx),
       UFTS_K6    = load_interval_res("int_fore_subnational_err_F_K6_ETS.rds", metric_idx),
       MFTS_K6    = load_interval_res("MFTS_int_fore_subnational_err_F_K6_ETS.rds", metric_idx),
       MLFTS_K6   = load_interval_res("MLFTS_int_fore_subnational_err_F_K6_ETS.rds", metric_idx),
-      FANOVA_K6  = load_interval_res("int_fore_subnational_err_F_ETS_K6_FANOVA.rds", metric_idx)
+      FANOVA_K6  = load_interval_res("FANOVA_int_fore_subnational_err_F_ETS_K6.rds", metric_idx)
     ),
     male = list(
       UFTS_EVR   = load_interval_res("int_fore_subnational_err_M_EVR_ETS.rds", metric_idx),
       MFTS_EVR   = load_interval_res("MFTS_int_fore_subnational_err_M_EVR_ETS.rds", metric_idx),
       MLFTS_EVR  = load_interval_res("MLFTS_int_fore_subnational_err_M_EVR_ETS.rds", metric_idx),
-      FANOVA_EVR = load_interval_res("int_fore_subnational_err_M_EVR_ETS_FANOVA.rds", metric_idx),
+      FANOVA_EVR = load_interval_res("FANOVA_int_fore_subnational_err_M_EVR_ETS.rds", metric_idx),
       HDFPCA     = load_interval_res("hdfpca_int_fore_subnational_err_M_EVR_ETS_CDF.rds", metric_idx),
       UFTS_K6    = load_interval_res("int_fore_subnational_err_M_K6_ETS.rds", metric_idx),
       MFTS_K6    = load_interval_res("MFTS_int_fore_subnational_err_M_K6_ETS.rds", metric_idx),
       MLFTS_K6   = load_interval_res("MLFTS_int_fore_subnational_err_M_K6_ETS.rds", metric_idx),
-      FANOVA_K6  = load_interval_res("int_fore_subnational_err_M_ETS_K6_FANOVA.rds", metric_idx)
+      FANOVA_K6  = load_interval_res("FANOVA_int_fore_subnational_err_M_ETS_K6.rds", metric_idx)
     )
   )
 }

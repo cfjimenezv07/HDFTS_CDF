@@ -3,7 +3,7 @@
 source("load_packages.R")
 
 # Subdirectories
-dir.data    <- here("data", "updated_data")
+dir.data    <- here("data", "updated_data/")
 dir.aux     <- here("auxiliary_source")
 dir.results <- here("results", "Results_Interval")
 dir.plots   <- here("results", "Plots")
@@ -326,3 +326,4 @@ for(h in 1:3) {
   
   plot_and_save(df_p, paste0("FANOVA_h", h, ".pdf"))
 }
+

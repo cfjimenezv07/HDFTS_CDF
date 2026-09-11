@@ -4,11 +4,11 @@
 source("load_packages.R")
 
 dir_source  <- here("auxiliary_source")
-dir_results <- here("results", "Results_Interval", "sd")
-dir.shiny2  <- here("results", "Shiny_App", "datasets_shiny_app", "IFE")
-dir.d       <- here("data", "updated_data")
+dir.results <- paste0(here("results", "Results_Interval", "sd"), "/")
+dir.shiny2  <- paste0(here("Shiny_App", "datasets_shiny_app", "IFE"), "/")
+dir.d       <- here("data", "updated_data/")
 
-if (!dir.exists(dir_results)) dir.create(dir_results, recursive = TRUE)
+if (!dir.exists(dir.results)) dir.create(dir.results, recursive = TRUE)
 if (!dir.exists(dir.shiny2))  dir.create(dir.shiny2, recursive = TRUE)
 
 # ==============================================================================

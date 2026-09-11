@@ -1,15 +1,18 @@
+###############################################################################
+# INTERVAL FORECASTING: SD / MFTS METHOD (CDF)
+###############################################################################
+
 # --- Source Auxiliary Functions ---
 source("load_packages.R")
 source(here("auxiliary_source", "auxiliary_interval.R"))
 
 # --- Define Output Directories ---
-dir.results <- here("results", "Results_Interval", "sd")
-dir.shiny2  <- here("results", "Shiny_App", "datasets_shiny_app", "IFE")
+dir.results <- paste0(here("results", "Results_Interval", "sd"), "/")
+dir.shiny2  <- paste0(here("Shiny_App", "datasets_shiny_app", "IFE"), "/")
 
 # Create directories if they do not exist
 if (!dir.exists(dir.results)) dir.create(dir.results, recursive = TRUE)
 if (!dir.exists(dir.shiny2))  dir.create(dir.shiny2, recursive = TRUE)
-
 
 # ==============================================================================
 # Function: interval_fore_subnational_cdf_MFTS
@@ -412,4 +415,3 @@ for (name in names(arrays_list)) {
   file_name <- paste0("MFTS_", gender, "_", comp, "_", level, ".rds")
   saveRDS(arr_new, file = file.path(dir.shiny2, file_name))
 }
-

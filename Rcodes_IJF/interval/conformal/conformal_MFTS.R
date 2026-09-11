@@ -6,8 +6,8 @@ source("load_packages.R")
 source(here("auxiliary_source", "auxiliary_interval.R"))
 
 # --- Define Output Directories ---
-dir.results <- here("results", "Results_Interval", "Conformal")
-dir.shiny2  <- here("results", "Shiny_App", "datasets_shiny_app", "IFE")
+dir.results <- paste0(here("results", "Results_Interval", "Conformal"), "/")
+dir.shiny2  <- paste0(here("Shiny_App", "datasets_shiny_app", "IFE"), "/")
 
 # Create directories if they do not exist
 if (!dir.exists(dir.results)) dir.create(dir.results, recursive = TRUE)
