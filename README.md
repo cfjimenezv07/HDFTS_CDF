@@ -17,7 +17,7 @@
 
 ## Software Dependencies & Environment
 
-This replication package was tested and verified under **R version 4.6.0**. To ensure full computational reproducibility, package management and exact package versions are specified via `load_packages.R`.
+This replication package was tested and verified under **R version 4.6.0**.
 
 ---
 
