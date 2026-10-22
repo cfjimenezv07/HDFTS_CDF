@@ -1,3 +1,13 @@
+#############################################################################################################
+# This script reproduces the point forecast error results for univariate functional time series (UFTS)
+# reported in Table 1 (Columns 1 and 6) using the EVR criterion and in Table A.1 (Columns 1 and 5)
+# using the K = 6 criterion.
+
+# At the end of this script, the saved results in dir_results correspond to:
+# - horizon_point_fore_subnational_err_F_EVR_ETS_mean.rds & horizon_point_fore_subnational_err_M_EVR_ETS_mean.rds -> Table 1 (Columns 1 & 6, UFTS)
+# - horizon_point_fore_subnational_err_F_K6_ETS_mean.rds  & horizon_point_fore_subnational_err_M_K6_ETS_mean.rds  -> Table A.1 (Columns 1 & 5, UFTS)
+#############################################################################################################
+
 # Load required setup and functions
 source("load_packages.R")
 source(here("auxiliary_source", "auxiliary_point.R"))
@@ -128,10 +138,16 @@ saveRDS(point_fore_subnational_err_M_EVR_ETS, file = file.path(dir_results, "poi
 saveRDS(point_fore_subnational_err_F_K6_ETS,  file = file.path(dir_results, "point_fore_subnational_err_F_K6_ETS.rds"))
 saveRDS(point_fore_subnational_err_M_K6_ETS,  file = file.path(dir_results, "point_fore_subnational_err_M_K6_ETS.rds"))
 
+
+# Save output objects for downstream table generation:
+# - EVR files contain results for Table 1 (Columns 1 & 6, UFTS)
+# - K6 files contain results for Table A.1 (Columns 1 & 5, UFTS)
 saveRDS(point_fore_subnational_err_F_EVR_ETS_mean, file = file.path(dir_results, "point_fore_subnational_err_F_EVR_ETS_mean.rds"))
 saveRDS(point_fore_subnational_err_F_K6_ETS_mean,  file = file.path(dir_results, "point_fore_subnational_err_F_K6_ETS_mean.rds"))
 saveRDS(point_fore_subnational_err_M_EVR_ETS_mean, file = file.path(dir_results, "point_fore_subnational_err_M_EVR_ETS_mean.rds"))
 saveRDS(point_fore_subnational_err_M_K6_ETS_mean,  file = file.path(dir_results, "point_fore_subnational_err_M_K6_ETS_mean.rds"))
+
+
 
 saveRDS(horizon_point_fore_subnational_err_F_EVR_ETS_mean, file = file.path(dir_results, "horizon_point_fore_subnational_err_F_EVR_ETS_mean.rds"))
 saveRDS(horizon_point_fore_subnational_err_F_K6_ETS_mean,  file = file.path(dir_results, "horizon_point_fore_subnational_err_F_K6_ETS_mean.rds"))

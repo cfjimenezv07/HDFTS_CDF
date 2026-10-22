@@ -1,6 +1,15 @@
 ###############################################################################
 # INTERVAL FORECASTING: SD / UFTS METHOD (CDF)
 ###############################################################################
+#############################################################################################################
+# This script reproduces the interval forecast error results (sd) for univariate functional time series (UFTS)
+# reported in Table 3 (Columns 1 and 6) using the EVR criterion and in Table B.1 (Columns 1 and 5)
+# using the K = 6 criterion.
+
+# At the end of this script, the saved results in dir.results correspond to:
+# - int_fore_subnational_err_F_EVR_ETS_mean.rds & int_fore_subnational_err_M_EVR_ETS_mean.rds -> Table 3 (Columns 1 & 6, UFTS)
+# - int_fore_subnational_err_F_K6_ETS_mean.rds  & int_fore_subnational_err_M_K6_ETS_mean.rds  -> Table B.1 (Columns 1 & 5, UFTS)
+#############################################################################################################
 
 # --- Source Auxiliary Functions ---
 source("load_packages.R")

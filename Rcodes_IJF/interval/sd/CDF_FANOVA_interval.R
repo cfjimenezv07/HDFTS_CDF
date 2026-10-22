@@ -1,3 +1,12 @@
+#############################################################################################################
+# This script reproduces the interval forecast error results (sd) for Functional Analysis of Variance Method of Jimenez-Varon et al. (2024) (FANOVA)
+# reported in Table 3 (Columns 4 and 9) using the EVR criterion and in Table B.1 (Columns 4 and 8)
+# using the K = 6 criterion.
+
+# At the end of this script, the saved results in dir.results correspond to:
+# - FANOVA_int_fore_subnational_err_F_EVR_ETS_mean & FANOVA_int_fore_subnational_err_M_EVR_ETS_mean -> Table 3 (Columns 3 & 8, FANOVA)
+# - FANOVA_int_fore_subnational_err_F_ETS_K6_mean.rds  & FANOVA_int_fore_subnational_err_M_ETS_K6_mean.rds  -> Table B.1 (Columns 3 & 7, FANOVA)
+#############################################################################################################
 # ==============================================================================
 # 0. LIBRARIES & DIRECTORIES
 # ==============================================================================
@@ -368,43 +377,57 @@ horizon_specific_int_fore_subnational_err_M_ETS_K6_alpha_0.95 <- apply(int_fore_
 # 6. SAVE ALL OBJECTS TO RESULTS DIRECTORY
 # ==============================================================================
 # --- 80% Level ---
-saveRDS(int_fore_subnational_err_F_EVR_ETS, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_F_EVR_ETS.rds"))
-saveRDS(int_fore_subnational_err_M_EVR_ETS, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_M_EVR_ETS.rds"))
-saveRDS(int_fore_subnational_err_F_EVR_ETS_tune_para, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para.rds"))
-saveRDS(int_fore_subnational_err_M_EVR_ETS_tune_para, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para.rds"))
-saveRDS(int_fore_subnational_err_F_EVR_ETS_tune_para_obj, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para_obj.rds"))
-saveRDS(int_fore_subnational_err_M_EVR_ETS_tune_para_obj, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para_obj.rds"))
-saveRDS(horizon_specific_int_fore_subnational_err_F_EVR_ETS, file = file.path(dir_results, "FANOVA_horizon_specific_int_fore_subnational_err_F_EVR_ETS.rds"))
-saveRDS(horizon_specific_int_fore_subnational_err_M_EVR_ETS, file = file.path(dir_results, "FANOVA_horizon_specific_int_fore_subnational_err_M_EVR_ETS.rds"))
+saveRDS(int_fore_subnational_err_F_EVR_ETS, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_EVR_ETS.rds"))
+saveRDS(int_fore_subnational_err_M_EVR_ETS, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_EVR_ETS.rds"))
+saveRDS(int_fore_subnational_err_F_EVR_ETS_tune_para, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para.rds"))
+saveRDS(int_fore_subnational_err_M_EVR_ETS_tune_para, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para.rds"))
+saveRDS(int_fore_subnational_err_F_EVR_ETS_tune_para_obj, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para_obj.rds"))
+saveRDS(int_fore_subnational_err_M_EVR_ETS_tune_para_obj, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para_obj.rds"))
+saveRDS(horizon_specific_int_fore_subnational_err_F_EVR_ETS, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_F_EVR_ETS.rds"))
+saveRDS(horizon_specific_int_fore_subnational_err_M_EVR_ETS, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_M_EVR_ETS.rds"))
 
-saveRDS(int_fore_subnational_err_F_ETS_K6, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_F_ETS_K6.rds"))
-saveRDS(int_fore_subnational_err_M_ETS_K6, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_M_ETS_K6.rds"))
-saveRDS(int_fore_subnational_err_F_ETS_tune_para_K6, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_F_ETS_tune_para_K6.rds"))
-saveRDS(int_fore_subnational_err_M_ETS_tune_para_K6, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_M_ETS_tune_para_K6.rds"))
-saveRDS(int_fore_subnational_err_F_ETS_tune_para_obj_K6, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_F_ETS_tune_para_obj_K6.rds"))
-saveRDS(int_fore_subnational_err_M_ETS_tune_para_obj_K6, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_M_ETS_tune_para_obj_K6.rds"))
-saveRDS(horizon_specific_int_fore_subnational_err_F_ETS_K6, file = file.path(dir_results, "FANOVA_horizon_specific_int_fore_subnational_err_F_ETS_K6.rds"))
-saveRDS(horizon_specific_int_fore_subnational_err_M_ETS_K6, file = file.path(dir_results, "FANOVA_horizon_specific_int_fore_subnational_err_M_ETS_K6.rds"))
+saveRDS(int_fore_subnational_err_F_ETS_K6, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_ETS_K6.rds"))
+saveRDS(int_fore_subnational_err_M_ETS_K6, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_ETS_K6.rds"))
+saveRDS(int_fore_subnational_err_F_ETS_tune_para_K6, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_ETS_tune_para_K6.rds"))
+saveRDS(int_fore_subnational_err_M_ETS_tune_para_K6, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_ETS_tune_para_K6.rds"))
+saveRDS(int_fore_subnational_err_F_ETS_tune_para_obj_K6, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_ETS_tune_para_obj_K6.rds"))
+saveRDS(int_fore_subnational_err_M_ETS_tune_para_obj_K6, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_ETS_tune_para_obj_K6.rds"))
+saveRDS(horizon_specific_int_fore_subnational_err_F_ETS_K6, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_F_ETS_K6.rds"))
+saveRDS(horizon_specific_int_fore_subnational_err_M_ETS_K6, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_M_ETS_K6.rds"))
 
 # --- 95% Level ---
-saveRDS(int_fore_subnational_err_F_EVR_ETS_alpha_0.95, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_alpha_0.95.rds"))
-saveRDS(int_fore_subnational_err_M_EVR_ETS_alpha_0.95, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_alpha_0.95.rds"))
-saveRDS(int_fore_subnational_err_F_EVR_ETS_tune_para_alpha_0.95, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para_alpha_0.95.rds"))
-saveRDS(int_fore_subnational_err_M_EVR_ETS_tune_para_alpha_0.95, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para_alpha_0.95.rds"))
-saveRDS(int_fore_subnational_err_F_EVR_ETS_tune_para_obj_alpha_0.95, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para_obj_alpha_0.95.rds"))
-saveRDS(int_fore_subnational_err_M_EVR_ETS_tune_para_obj_alpha_0.95, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para_obj_alpha_0.95.rds"))
-saveRDS(horizon_specific_int_fore_subnational_err_F_EVR_ETS_alpha_0.95, file = file.path(dir_results, "FANOVA_horizon_specific_int_fore_subnational_err_F_EVR_ETS_alpha_0.95.rds"))
-saveRDS(horizon_specific_int_fore_subnational_err_M_EVR_ETS_alpha_0.95, file = file.path(dir_results, "FANOVA_horizon_specific_int_fore_subnational_err_M_EVR_ETS_alpha_0.95.rds"))
+saveRDS(int_fore_subnational_err_F_EVR_ETS_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_alpha_0.95.rds"))
+saveRDS(int_fore_subnational_err_M_EVR_ETS_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_alpha_0.95.rds"))
+saveRDS(int_fore_subnational_err_F_EVR_ETS_tune_para_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para_alpha_0.95.rds"))
+saveRDS(int_fore_subnational_err_M_EVR_ETS_tune_para_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para_alpha_0.95.rds"))
+saveRDS(int_fore_subnational_err_F_EVR_ETS_tune_para_obj_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para_obj_alpha_0.95.rds"))
+saveRDS(int_fore_subnational_err_M_EVR_ETS_tune_para_obj_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para_obj_alpha_0.95.rds"))
+saveRDS(horizon_specific_int_fore_subnational_err_F_EVR_ETS_alpha_0.95, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_F_EVR_ETS_alpha_0.95.rds"))
+saveRDS(horizon_specific_int_fore_subnational_err_M_EVR_ETS_alpha_0.95, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_M_EVR_ETS_alpha_0.95.rds"))
 
-saveRDS(int_fore_subnational_err_F_ETS_K6_alpha_0.95, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_F_ETS_K6_alpha_0.95.rds"))
-saveRDS(int_fore_subnational_err_M_ETS_K6_alpha_0.95, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_M_ETS_K6_alpha_0.95.rds"))
-saveRDS(int_fore_subnational_err_F_ETS_tune_para_K6_alpha_0.95, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_F_ETS_tune_para_K6_alpha_0.95.rds"))
-saveRDS(int_fore_subnational_err_M_ETS_tune_para_K6_alpha_0.95, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_M_ETS_tune_para_K6_alpha_0.95.rds"))
-saveRDS(int_fore_subnational_err_F_ETS_tune_para_obj_K6_alpha_0.95, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_F_ETS_tune_para_obj_K6_alpha_0.95.rds"))
-saveRDS(int_fore_subnational_err_M_ETS_tune_para_obj_K6_alpha_0.95, file = file.path(dir_results, "FANOVA_int_fore_subnational_err_M_ETS_tune_para_obj_K6_alpha_0.95.rds"))
-saveRDS(horizon_specific_int_fore_subnational_err_F_ETS_K6_alpha_0.95, file = file.path(dir_results, "FANOVA_horizon_specific_int_fore_subnational_err_F_ETS_K6_alpha_0.95.rds"))
-saveRDS(horizon_specific_int_fore_subnational_err_M_ETS_K6_alpha_0.95, file = file.path(dir_results, "FANOVA_horizon_specific_int_fore_subnational_err_M_ETS_K6_alpha_0.95.rds"))
+saveRDS(int_fore_subnational_err_F_ETS_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_ETS_K6_alpha_0.95.rds"))
+saveRDS(int_fore_subnational_err_M_ETS_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_ETS_K6_alpha_0.95.rds"))
+saveRDS(int_fore_subnational_err_F_ETS_tune_para_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_ETS_tune_para_K6_alpha_0.95.rds"))
+saveRDS(int_fore_subnational_err_M_ETS_tune_para_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_ETS_tune_para_K6_alpha_0.95.rds"))
+saveRDS(int_fore_subnational_err_F_ETS_tune_para_obj_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_ETS_tune_para_obj_K6_alpha_0.95.rds"))
+saveRDS(int_fore_subnational_err_M_ETS_tune_para_obj_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_ETS_tune_para_obj_K6_alpha_0.95.rds"))
+saveRDS(horizon_specific_int_fore_subnational_err_F_ETS_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_F_ETS_K6_alpha_0.95.rds"))
+saveRDS(horizon_specific_int_fore_subnational_err_M_ETS_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_M_ETS_K6_alpha_0.95.rds"))
 
+# Results in Tables 3 and B.1 are mean across prefectures
+# Table 3
+FANOVA_int_fore_subnational_err_F_EVR_ETS_mean <- apply(FANOVA_int_fore_subnational_err_F_EVR_ETS, c(2,3), mean)
+FANOVA_int_fore_subnational_err_M_EVR_ETS_mean <- apply(FANOVA_int_fore_subnational_err_M_EVR_ETS, c(2,3), mean)
+# Table B.1
+FANOVA_int_fore_subnational_err_F_ETS_K6_mean <- apply(FANOVA_int_fore_subnational_err_F_ETS_K6, c(2,3), mean)
+FANOVA_int_fore_subnational_err_M_ETS_K6_mean <- apply(FANOVA_int_fore_subnational_err_M_ETS_K6, c(2,3), mean)
+
+
+saveRDS(FANOVA_int_fore_subnational_err_F_EVR_ETS_mean, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_mean.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_M_EVR_ETS_mean, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_mean.rds"))
+
+saveRDS(FANOVA_int_fore_subnational_err_F_ETS_K6_mean, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_ETS_K6_mean.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_M_ETS_K6_mean, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_ETS_K6_mean.rds"))
 # ==============================================================================
 # 7. EXPORT TO SHINY APP DIRECTORY
 # ==============================================================================
@@ -428,3 +451,4 @@ for (name in names(arrays_list)) {
   file_name <- paste0("FANOVA_", gender, "_", comp, "_", level, ".rds")
   saveRDS(arr, file = file.path(dir.shiny2, file_name))
 }
+

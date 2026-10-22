@@ -1,3 +1,10 @@
+#############################################################################################################
+# This script reproduces the interval forecast error results (sd) for High dimensional functional PCA (HDFPCA)
+# reported in Table 1 (Columns 5 and 10) using the EVR criterion.
+
+# At the end of this script, the saved results in dir.results correspond to:
+# - horizon_specific_hdfpca_int_fore_subnational_err_F_EVR_ETS_CDF.rds & horizon_specific_hdfpca_int_fore_subnational_err_M_EVR_ETS_CDF.rds -> Table 3 (Columns 5 & 10, HDFPCA)
+#############################################################################################################
 # ==============================================================================
 # File Directory Setup
 # ==============================================================================
@@ -11,7 +18,7 @@ dir.shiny2  <- paste0(here("Shiny_App", "datasets_shiny_app", "IFE"), "/")
 source(file.path(dir_source, "auxiliary_interval.R"))
 
 # Ensure destination export directories exist
-if (!dir.exists(dir_results)) dir.create(dir_results, recursive = TRUE)
+if (!dir.exists(dir.results)) dir.create(dir.results, recursive = TRUE)
 if (!dir.exists(dir.shiny2))  dir.create(dir.shiny2, recursive = TRUE)
 
 # fdata_F: female data
@@ -399,26 +406,26 @@ run_eval_loop <- function(level_sig, first_order, second_order) {
 # alpha = 0.8
 res_EVR_80 <- run_eval_loop(level_sig = 0.8, first_order = 6, second_order = 2)
 
-saveRDS(res_EVR_80$err_F, file.path(dir_results, "hdfpca_int_fore_subnational_err_F_EVR_ETS_CDF.rds"))
-saveRDS(res_EVR_80$err_M, file.path(dir_results, "hdfpca_int_fore_subnational_err_M_EVR_ETS_CDF.rds"))
-saveRDS(res_EVR_80$tune_F, file.path(dir_results, "hdfpca_int_fore_subnational_err_F_EVR_ETS_tune_para_CDF.rds"))
-saveRDS(res_EVR_80$tune_M, file.path(dir_results, "hdfpca_int_fore_subnational_err_M_EVR_ETS_tune_para_CDF.rds"))
-saveRDS(res_EVR_80$tune_F_obj, file.path(dir_results, "hdfpca_int_fore_subnational_err_F_EVR_ETS_tune_para_obj_CDF.rds"))
-saveRDS(res_EVR_80$tune_M_obj, file.path(dir_results, "hdfpca_int_fore_subnational_err_M_EVR_ETS_tune_para_obj_CDF.rds"))
-saveRDS(res_EVR_80$horizon_F, file.path(dir_results, "horizon_specific_hdfpca_int_fore_subnational_err_F_EVR_ETS_CDF.rds"))
-saveRDS(res_EVR_80$horizon_M, file.path(dir_results, "horizon_specific_hdfpca_int_fore_subnational_err_M_EVR_ETS_CDF.rds"))
+saveRDS(res_EVR_80$err_F, file.path(dir.results, "hdfpca_int_fore_subnational_err_F_EVR_ETS_CDF.rds"))
+saveRDS(res_EVR_80$err_M, file.path(dir.results, "hdfpca_int_fore_subnational_err_M_EVR_ETS_CDF.rds"))
+saveRDS(res_EVR_80$tune_F, file.path(dir.results, "hdfpca_int_fore_subnational_err_F_EVR_ETS_tune_para_CDF.rds"))
+saveRDS(res_EVR_80$tune_M, file.path(dir.results, "hdfpca_int_fore_subnational_err_M_EVR_ETS_tune_para_CDF.rds"))
+saveRDS(res_EVR_80$tune_F_obj, file.path(dir.results, "hdfpca_int_fore_subnational_err_F_EVR_ETS_tune_para_obj_CDF.rds"))
+saveRDS(res_EVR_80$tune_M_obj, file.path(dir.results, "hdfpca_int_fore_subnational_err_M_EVR_ETS_tune_para_obj_CDF.rds"))
+saveRDS(res_EVR_80$horizon_F, file.path(dir.results, "horizon_specific_hdfpca_int_fore_subnational_err_F_EVR_ETS_CDF.rds"))
+saveRDS(res_EVR_80$horizon_M, file.path(dir.results, "horizon_specific_hdfpca_int_fore_subnational_err_M_EVR_ETS_CDF.rds"))
 
 # alpha = 0.95
 res_EVR_95 <- run_eval_loop(level_sig = 0.95, first_order = 6, second_order = 2)
 
-saveRDS(res_EVR_95$err_F, file.path(dir_results, "hdfpca_int_fore_subnational_err_F_EVR_ETS_alpha_0.95_CDF.rds"))
-saveRDS(res_EVR_95$err_M, file.path(dir_results, "hdfpca_int_fore_subnational_err_M_EVR_ETS_alpha_0.95_CDF.rds"))
-saveRDS(res_EVR_95$tune_F, file.path(dir_results, "hdfpca_int_fore_subnational_err_F_EVR_ETS_tune_para_alpha_0.95_CDF.rds"))
-saveRDS(res_EVR_95$tune_M, file.path(dir_results, "hdfpca_int_fore_subnational_err_M_EVR_ETS_tune_para_alpha_0.95_CDF.rds"))
-saveRDS(res_EVR_95$tune_F_obj, file.path(dir_results, "hdfpca_int_fore_subnational_err_F_EVR_ETS_tune_para_obj_alpha_0.95_CDF.rds"))
-saveRDS(res_EVR_95$tune_M_obj, file.path(dir_results, "hdfpca_int_fore_subnational_err_M_EVR_ETS_tune_para_obj_alpha_0.95_CDF.rds"))
-saveRDS(res_EVR_95$horizon_F, file.path(dir_results, "horizon_specific_hdfpca_int_fore_subnational_err_F_EVR_ETS_alpha_0.95_CDF.rds"))
-saveRDS(res_EVR_95$horizon_M, file.path(dir_results, "horizon_specific_hdfpca_int_fore_subnational_err_M_EVR_ETS_alpha_0.95_CDF.rds"))
+saveRDS(res_EVR_95$err_F, file.path(dir.results, "hdfpca_int_fore_subnational_err_F_EVR_ETS_alpha_0.95_CDF.rds"))
+saveRDS(res_EVR_95$err_M, file.path(dir.results, "hdfpca_int_fore_subnational_err_M_EVR_ETS_alpha_0.95_CDF.rds"))
+saveRDS(res_EVR_95$tune_F, file.path(dir.results, "hdfpca_int_fore_subnational_err_F_EVR_ETS_tune_para_alpha_0.95_CDF.rds"))
+saveRDS(res_EVR_95$tune_M, file.path(dir.results, "hdfpca_int_fore_subnational_err_M_EVR_ETS_tune_para_alpha_0.95_CDF.rds"))
+saveRDS(res_EVR_95$tune_F_obj, file.path(dir.results, "hdfpca_int_fore_subnational_err_F_EVR_ETS_tune_para_obj_alpha_0.95_CDF.rds"))
+saveRDS(res_EVR_95$tune_M_obj, file.path(dir.results, "hdfpca_int_fore_subnational_err_M_EVR_ETS_tune_para_obj_alpha_0.95_CDF.rds"))
+saveRDS(res_EVR_95$horizon_F, file.path(dir.results, "horizon_specific_hdfpca_int_fore_subnational_err_F_EVR_ETS_alpha_0.95_CDF.rds"))
+saveRDS(res_EVR_95$horizon_M, file.path(dir.results, "horizon_specific_hdfpca_int_fore_subnational_err_M_EVR_ETS_alpha_0.95_CDF.rds"))
 
 
 # ------------------------------------------------------------------------------
@@ -429,26 +436,26 @@ saveRDS(res_EVR_95$horizon_M, file.path(dir_results, "horizon_specific_hdfpca_in
 # alpha = 0.8
 res_K6_80 <- run_eval_loop(level_sig = 0.8, first_order = 6, second_order = 2)
 
-saveRDS(res_K6_80$err_F, file.path(dir_results, "hdfpca_int_fore_subnational_err_F_K6_ETS_CDF.rds"))
-saveRDS(res_K6_80$err_M, file.path(dir_results, "hdfpca_int_fore_subnational_err_M_K6_ETS_CDF.rds"))
-saveRDS(res_K6_80$tune_F, file.path(dir_results, "hdfpca_int_fore_subnational_err_F_K6_ETS_tune_para_CDF.rds"))
-saveRDS(res_K6_80$tune_M, file.path(dir_results, "hdfpca_int_fore_subnational_err_M_K6_ETS_tune_para_CDF.rds"))
-saveRDS(res_K6_80$tune_F_obj, file.path(dir_results, "hdfpca_int_fore_subnational_err_F_K6_ETS_tune_para_obj_CDF.rds"))
-saveRDS(res_K6_80$tune_M_obj, file.path(dir_results, "hdfpca_int_fore_subnational_err_M_K6_ETS_tune_para_obj_CDF.rds"))
-saveRDS(res_K6_80$horizon_F, file.path(dir_results, "horizon_specific_hdfpca_int_fore_subnational_err_F_K6_ETS_CDF.rds"))
-saveRDS(res_K6_80$horizon_M, file.path(dir_results, "horizon_specific_hdfpca_int_fore_subnational_err_M_K6_ETS_CDF.rds"))
+saveRDS(res_K6_80$err_F, file.path(dir.results, "hdfpca_int_fore_subnational_err_F_K6_ETS_CDF.rds"))
+saveRDS(res_K6_80$err_M, file.path(dir.results, "hdfpca_int_fore_subnational_err_M_K6_ETS_CDF.rds"))
+saveRDS(res_K6_80$tune_F, file.path(dir.results, "hdfpca_int_fore_subnational_err_F_K6_ETS_tune_para_CDF.rds"))
+saveRDS(res_K6_80$tune_M, file.path(dir.results, "hdfpca_int_fore_subnational_err_M_K6_ETS_tune_para_CDF.rds"))
+saveRDS(res_K6_80$tune_F_obj, file.path(dir.results, "hdfpca_int_fore_subnational_err_F_K6_ETS_tune_para_obj_CDF.rds"))
+saveRDS(res_K6_80$tune_M_obj, file.path(dir.results, "hdfpca_int_fore_subnational_err_M_K6_ETS_tune_para_obj_CDF.rds"))
+saveRDS(res_K6_80$horizon_F, file.path(dir.results, "horizon_specific_hdfpca_int_fore_subnational_err_F_K6_ETS_CDF.rds"))
+saveRDS(res_K6_80$horizon_M, file.path(dir.results, "horizon_specific_hdfpca_int_fore_subnational_err_M_K6_ETS_CDF.rds"))
 
 # alpha = 0.95
 res_K6_95 <- run_eval_loop(level_sig = 0.95, first_order = 6, second_order = 2)
 
-saveRDS(res_K6_95$err_F, file.path(dir_results, "hdfpca_int_fore_subnational_err_F_K6_ETS_alpha_0.95_CDF.rds"))
-saveRDS(res_K6_95$err_M, file.path(dir_results, "hdfpca_int_fore_subnational_err_M_K6_ETS_alpha_0.95_CDF.rds"))
-saveRDS(res_K6_95$tune_F, file.path(dir_results, "hdfpca_int_fore_subnational_err_F_K6_ETS_tune_para_alpha_0.95_CDF.rds"))
-saveRDS(res_K6_95$tune_M, file.path(dir_results, "hdfpca_int_fore_subnational_err_M_K6_ETS_tune_para_alpha_0.95_CDF.rds"))
-saveRDS(res_K6_95$tune_F_obj, file.path(dir_results, "hdfpca_int_fore_subnational_err_F_K6_ETS_tune_para_obj_alpha_0.95_CDF.rds"))
-saveRDS(res_K6_95$tune_M_obj, file.path(dir_results, "hdfpca_int_fore_subnational_err_M_K6_ETS_tune_para_obj_alpha_0.95_CDF.rds"))
-saveRDS(res_K6_95$horizon_F, file.path(dir_results, "horizon_specific_hdfpca_int_fore_subnational_err_F_K6_ETS_alpha_0.95_CDF.rds"))
-saveRDS(res_K6_95$horizon_M, file.path(dir_results, "horizon_specific_hdfpca_int_fore_subnational_err_M_K6_ETS_alpha_0.95_CDF.rds"))
+saveRDS(res_K6_95$err_F, file.path(dir.results, "hdfpca_int_fore_subnational_err_F_K6_ETS_alpha_0.95_CDF.rds"))
+saveRDS(res_K6_95$err_M, file.path(dir.results, "hdfpca_int_fore_subnational_err_M_K6_ETS_alpha_0.95_CDF.rds"))
+saveRDS(res_K6_95$tune_F, file.path(dir.results, "hdfpca_int_fore_subnational_err_F_K6_ETS_tune_para_alpha_0.95_CDF.rds"))
+saveRDS(res_K6_95$tune_M, file.path(dir.results, "hdfpca_int_fore_subnational_err_M_K6_ETS_tune_para_alpha_0.95_CDF.rds"))
+saveRDS(res_K6_95$tune_F_obj, file.path(dir.results, "hdfpca_int_fore_subnational_err_F_K6_ETS_tune_para_obj_alpha_0.95_CDF.rds"))
+saveRDS(res_K6_95$tune_M_obj, file.path(dir.results, "hdfpca_int_fore_subnational_err_M_K6_ETS_tune_para_obj_alpha_0.95_CDF.rds"))
+saveRDS(res_K6_95$horizon_F, file.path(dir.results, "horizon_specific_hdfpca_int_fore_subnational_err_F_K6_ETS_alpha_0.95_CDF.rds"))
+saveRDS(res_K6_95$horizon_M, file.path(dir.results, "horizon_specific_hdfpca_int_fore_subnational_err_M_K6_ETS_alpha_0.95_CDF.rds"))
 
 
 # ==============================================================================
@@ -458,22 +465,22 @@ saveRDS(res_K6_95$horizon_M, file.path(dir_results, "horizon_specific_hdfpca_int
 # ----------------
 # Level of significance = 0.8
 # ----------------
-hdfpca_int_fore_subnational_err_F_EVR_ETS <- readRDS(file.path(dir_results, "hdfpca_int_fore_subnational_err_F_EVR_ETS_CDF.rds"))
-hdfpca_int_fore_subnational_err_M_EVR_ETS <- readRDS(file.path(dir_results, "hdfpca_int_fore_subnational_err_M_EVR_ETS_CDF.rds"))
+hdfpca_int_fore_subnational_err_F_EVR_ETS <- readRDS(file.path(dir.results, "hdfpca_int_fore_subnational_err_F_EVR_ETS_CDF.rds"))
+hdfpca_int_fore_subnational_err_M_EVR_ETS <- readRDS(file.path(dir.results, "hdfpca_int_fore_subnational_err_M_EVR_ETS_CDF.rds"))
 
 # FIXED: Points to the distinct K6 RDS files instead of duplicating EVR
-hdfpca_int_fore_subnational_err_F_K6_ETS  <- readRDS(file.path(dir_results, "hdfpca_int_fore_subnational_err_F_K6_ETS_CDF.rds"))
-hdfpca_int_fore_subnational_err_M_K6_ETS  <- readRDS(file.path(dir_results, "hdfpca_int_fore_subnational_err_M_K6_ETS_CDF.rds"))
+hdfpca_int_fore_subnational_err_F_K6_ETS  <- readRDS(file.path(dir.results, "hdfpca_int_fore_subnational_err_F_K6_ETS_CDF.rds"))
+hdfpca_int_fore_subnational_err_M_K6_ETS  <- readRDS(file.path(dir.results, "hdfpca_int_fore_subnational_err_M_K6_ETS_CDF.rds"))
 
 # ----------------
 # Level of significance = 0.95
 # ----------------
-hdfpca_int_fore_subnational_err_F_EVR_ETS_alpha_0.95 <- readRDS(file.path(dir_results, "hdfpca_int_fore_subnational_err_F_EVR_ETS_alpha_0.95_CDF.rds"))
-hdfpca_int_fore_subnational_err_M_EVR_ETS_alpha_0.95 <- readRDS(file.path(dir_results, "hdfpca_int_fore_subnational_err_M_EVR_ETS_alpha_0.95_CDF.rds"))
+hdfpca_int_fore_subnational_err_F_EVR_ETS_alpha_0.95 <- readRDS(file.path(dir.results, "hdfpca_int_fore_subnational_err_F_EVR_ETS_alpha_0.95_CDF.rds"))
+hdfpca_int_fore_subnational_err_M_EVR_ETS_alpha_0.95 <- readRDS(file.path(dir.results, "hdfpca_int_fore_subnational_err_M_EVR_ETS_alpha_0.95_CDF.rds"))
 
 # FIXED: Points to the distinct K6 RDS files instead of duplicating EVR
-hdfpca_int_fore_subnational_err_F_K6_ETS_alpha_0.95  <- readRDS(file.path(dir_results, "hdfpca_int_fore_subnational_err_F_K6_ETS_alpha_0.95_CDF.rds"))
-hdfpca_int_fore_subnational_err_M_K6_ETS_alpha_0.95  <- readRDS(file.path(dir_results, "hdfpca_int_fore_subnational_err_M_K6_ETS_alpha_0.95_CDF.rds"))
+hdfpca_int_fore_subnational_err_F_K6_ETS_alpha_0.95  <- readRDS(file.path(dir.results, "hdfpca_int_fore_subnational_err_F_K6_ETS_alpha_0.95_CDF.rds"))
+hdfpca_int_fore_subnational_err_M_K6_ETS_alpha_0.95  <- readRDS(file.path(dir.results, "hdfpca_int_fore_subnational_err_M_K6_ETS_alpha_0.95_CDF.rds"))
 
 # List of arrays to process (47 × 16 × 3)
 arrays_list <- list(

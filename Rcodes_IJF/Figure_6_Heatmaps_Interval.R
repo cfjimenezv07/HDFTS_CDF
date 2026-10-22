@@ -138,13 +138,13 @@ cpd_lists  <- generate_interval_lists(metric_idx = 2)
 df_cpd_f   <- compute_min_counts(cpd_lists$female)
 df_cpd_m   <- compute_min_counts(cpd_lists$male)
 
-ggsave(file.path(dir.plots, "Figure5a_Female_CPD.pdf"), plot = plot_heatmap(df_cpd_f, labels_9m), width = 8, height = 9)
-ggsave(file.path(dir.plots, "Figure5b_Male_CPD.pdf"),   plot = plot_heatmap(df_cpd_m, labels_9m), width = 8, height = 9)
+ggsave(file.path(dir.plots, "Figure6a_Female_CPD.pdf"), plot = plot_heatmap(df_cpd_f, labels_9m), width = 8, height = 9)
+ggsave(file.path(dir.plots, "Figure6b_Male_CPD.pdf"),   plot = plot_heatmap(df_cpd_m, labels_9m), width = 8, height = 9)
 
 # --- Interval Score (Metric Index 3) ---
 score_lists <- generate_interval_lists(metric_idx = 3)
 df_score_f  <- compute_min_counts(score_lists$female)
 df_score_m  <- compute_min_counts(score_lists$male)
 
-ggsave(file.path(dir.plots, "Figure5c_Female_Score.pdf"), plot = plot_heatmap(df_score_f, labels_9m), width = 8, height = 9)
-ggsave(file.path(dir.plots, "Figure5d_Male_Score.pdf"),   plot = plot_heatmap(df_score_m, labels_9m), width = 8, height = 9)
+ggsave(file.path(dir.plots, "Figure6c_Female_Score.pdf"), plot = plot_heatmap(df_score_f, labels_9m), width = 8, height = 9)
+ggsave(file.path(dir.plots, "Figure6d_Male_Score.pdf"),   plot = plot_heatmap(df_score_m, labels_9m), width = 8, height = 9)

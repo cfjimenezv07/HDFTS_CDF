@@ -17,6 +17,7 @@ if (!dir.exists(dir.p))       dir.create(dir.p, recursive = TRUE)
 
 # 2. PARAMETERS & DATASET INITIALIZATION
 # ------------------------------------------------------------------------------
+set.seed(12345)
 year         <- 1975:2023
 n_year       <- length(year)
 age          <- 0:110
@@ -158,7 +159,7 @@ stat_summary_table <- data.frame(
 )
 
 print(stat_summary_table)
-# write.csv(stat_summary_table, file.path(dir.results, "stationarity_summary.csv"), row.names = FALSE)
+
 
 
 # --- C. Heteroscedasticity Tests & Plots (FTSgof) ---
@@ -175,3 +176,4 @@ df_fCH <- data.frame(
   sex     = rep(c("Female", "Male"), each = n_prefectures)
 )
 
+print(df_fCH)

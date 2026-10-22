@@ -104,7 +104,7 @@ plot_and_save <- function(df_h, filename) {
     )
   
   print(p)
-  ggsave(filename = paste0(dir.plots, filename), plot = p, width = 8, height = 6)
+  ggsave(filename = file.path(dir.plots, filename), plot = p, width = 8, height = 6)
 }
 
 # 4. METHOD 1: UFTS
@@ -244,7 +244,7 @@ mlfts_plot_data <- get_multi_horizon_data_MLFTS(female_prefecture_dx[[1]], male_
 
 for(h_val in 1:3) {
   df_h <- mlfts_plot_data %>% filter(Horizon == paste0("h = ", h_val))
-  plot_and_save(df_h, paste0("MLFTS_Clean_h", h_val, ".pdf"))
+  plot_and_save(df_h, paste0("MLFTS_h", h_val, ".pdf"))
 }
 
 # 7. METHOD 4: FANOVA

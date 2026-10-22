@@ -95,10 +95,10 @@ for (ij in 1:n_prefectures) {
 }
 
 # Export standard model matrices
-# saveRDS(ncomp_UFTS_F,    file = file.path(dir_results, "ncomp_UFTS_F.rds"))
-# saveRDS(ncomp_UFTS_M,    file = file.path(dir_results, "ncomp_UFTS_M.rds"))
-# saveRDS(ncomp_MFTS,      file = file.path(dir_results, "ncomp_MFTS.rds"))
-# saveRDS(ncomp_MLFTS_Agg, file = file.path(dir_results, "ncomp_MLFTS_Agg.rds"))
+saveRDS(ncomp_UFTS_F,    file = file.path(dir_results, "ncomp_UFTS_F.rds"))
+saveRDS(ncomp_UFTS_M,    file = file.path(dir_results, "ncomp_UFTS_M.rds"))
+saveRDS(ncomp_MFTS,      file = file.path(dir_results, "ncomp_MFTS.rds"))
+saveRDS(ncomp_MLFTS_Agg, file = file.path(dir_results, "ncomp_MLFTS_Agg.rds"))
 
 # 5. Functional ANOVA Component Selection (FANOVA) ---------------------------
 

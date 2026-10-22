@@ -1,3 +1,13 @@
+#############################################################################################################
+# This script reproduces the interval forecast error results (sd) for Multilevel functional time series (MLFTS)
+# reported in Table 3 (Columns 3 and 8) using the EVR criterion and in Table B.1 (Columns 3 and 7)
+# using the K = 6 criterion.
+
+# At the end of this script, the saved results in dir.results correspond to:
+# - MLFTS_int_fore_subnational_err_F_EVR_ETS_mean.rds & MLFTS_int_fore_subnational_err_M_EVR_ETS_mean.rds -> Table 3 (Columns 3 & 8, MLFTS)
+# - MLFTS_int_fore_subnational_err_F_K6_ETS_mean.rds  & MLFTS_int_fore_subnational_err_M_K6_ETS_mean.rds  -> Table B.1 (Columns 3 & 7, MLFTS)
+#############################################################################################################
+
 # ==============================================================================
 # 0. SETUP & DEPENDENCIES
 # ==============================================================================
@@ -233,14 +243,14 @@ for (key in names(scenarios)) {
   sfx <- scenarios[[key]]$suffix
   res <- results[[key]]
   
-  saveRDS(res$err_F,      file = file.path(dir_results, paste0("MLFTS_int_fore_subnational_err_F", sfx, ".rds")))
-  saveRDS(res$err_M,      file = file.path(dir_results, paste0("MLFTS_int_fore_subnational_err_M", sfx, ".rds")))
-  saveRDS(res$tune_F,     file = file.path(dir_results, paste0("MLFTS_int_fore_subnational_err_F", sfx, "_tune_para.rds")))
-  saveRDS(res$tune_M,     file = file.path(dir_results, paste0("MLFTS_int_fore_subnational_err_M", sfx, "_tune_para.rds")))
-  saveRDS(res$tune_obj_F, file = file.path(dir_results, paste0("MLFTS_int_fore_subnational_err_F", sfx, "_tune_para_obj.rds")))
-  saveRDS(res$tune_obj_M, file = file.path(dir_results, paste0("MLFTS_int_fore_subnational_err_M", sfx, "_tune_para_obj.rds")))
-  saveRDS(res$err_F_mean, file = file.path(dir_results, paste0("MLFTS_int_fore_subnational_err_F", sfx, "_mean.rds")))
-  saveRDS(res$err_M_mean, file = file.path(dir_results, paste0("MLFTS_int_fore_subnational_err_M", sfx, "_mean.rds")))
+  saveRDS(res$err_F,      file = file.path(dir.results, paste0("MLFTS_int_fore_subnational_err_F", sfx, ".rds")))
+  saveRDS(res$err_M,      file = file.path(dir.results, paste0("MLFTS_int_fore_subnational_err_M", sfx, ".rds")))
+  saveRDS(res$tune_F,     file = file.path(dir.results, paste0("MLFTS_int_fore_subnational_err_F", sfx, "_tune_para.rds")))
+  saveRDS(res$tune_M,     file = file.path(dir.results, paste0("MLFTS_int_fore_subnational_err_M", sfx, "_tune_para.rds")))
+  saveRDS(res$tune_obj_F, file = file.path(dir.results, paste0("MLFTS_int_fore_subnational_err_F", sfx, "_tune_para_obj.rds")))
+  saveRDS(res$tune_obj_M, file = file.path(dir.results, paste0("MLFTS_int_fore_subnational_err_M", sfx, "_tune_para_obj.rds")))
+  saveRDS(res$err_F_mean, file = file.path(dir.results, paste0("MLFTS_int_fore_subnational_err_F", sfx, "_mean.rds")))
+  saveRDS(res$err_M_mean, file = file.path(dir.results, paste0("MLFTS_int_fore_subnational_err_M", sfx, "_mean.rds")))
 }
 
 

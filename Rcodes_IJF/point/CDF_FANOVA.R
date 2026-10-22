@@ -1,3 +1,13 @@
+#############################################################################################################
+# This script reproduces the point forecast error results for Functional Analysis of Variance Method of Jimenez-Varon et al. (2024) (FANOVA)
+# reported in Table 1 (Columns 4 and 9) using the EVR criterion and in Table A.1 (Columns 4 and 8)
+# using the K = 6 criterion.
+
+# At the end of this script, the saved results in dir_results correspond to:
+# - FANOVA_errors_EVR_matrix.rds -> Table 1 (Columns 5 & 10, FANOVA: KLD & JSD for Female/Male)
+# - FANOVA_errors_K_matrix.rds   -> Table A.1 (Columns 4 & 8, FANOVA: KLD & JSD for Female/Male)
+#############################################################################################################
+
 # Load helper sources
 source("load_packages.R")
 source(here("auxiliary_source", "auxiliary_point.R"))

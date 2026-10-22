@@ -1,3 +1,10 @@
+#############################################################################################################
+# This script reproduces the interval forecast error results (Conformal) for High dimensional functional PCA (HDFPCA)
+# reported in Table C.1 (Column 5) using the EVR criterion.
+
+# At the end of this script, the saved results in dir.results correspond to:
+# - hdfpca_int_fore_subnational_err_F_EVR_conformal_mean.rds & hdfpca_int_fore_subnational_err_M_EVR_conformal_mean.rds -> Table C.1 (Column 5, HDFPCA)
+#############################################################################################################
 # ==============================================================================
 # Directory Setup & Source Dependencies
 # ==============================================================================
@@ -183,6 +190,8 @@ save_hdfpca_results(res_HDFPCA_080, suffix = "")
 save_hdfpca_results(res_HDFPCA_095, suffix = "_alpha_0.95")
 
 
+
+
 # ==============================================================================
 # Export to Shiny Directory
 # ==============================================================================
@@ -198,3 +207,4 @@ for (name in names(arrays_list_shiny)) {
   file_name <- paste0(name, ".rds")
   saveRDS(arrays_list_shiny[[name]], file = file.path(dir.shiny2, file_name))
 }
+

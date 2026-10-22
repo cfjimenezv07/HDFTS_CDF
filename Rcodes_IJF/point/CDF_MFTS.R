@@ -1,3 +1,13 @@
+#############################################################################################################
+# This script reproduces the point forecast error results for Multivariate functional time series (MFTS)
+# reported in Table 1 (Columns 2 and 7) using the EVR criterion and in Table A.1 (Columns 2 and 6)
+# using the K = 6 criterion.
+
+# At the end of this script, the saved results in dir_results correspond to:
+# - horizon_point_fore_subnational_err_MFTS_F_EVR_ETS_mean.rds & horizon_point_fore_subnational_err_MFTS_M_EVR_ETS_mean.rds -> Table 1 (Columns 2 & 7, MFTS)
+# - horizon_point_fore_subnational_err_MFTS_F_K6_ETS_mean.rds  & horizon_point_fore_subnational_err_MFTS_M_K6_ETS_mean.rds  -> Table A.1 (Columns 2 & 6, MFTS)
+#############################################################################################################
+
 # Load required setup and functions
 source("load_packages.R")
 source(here("auxiliary_source", "auxiliary_point.R"))

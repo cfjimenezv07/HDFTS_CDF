@@ -1,3 +1,10 @@
+#############################################################################################################
+# This script reproduces the point forecast error results for High dimensional functional PCA (HDFPCA)
+# reported in Table 1 (Columns 5 and 10) using the EVR criterion.
+
+# At the end of this script, the saved results in dir_results correspond to:
+# - horizon_point_fore_subnational_err_HDFPCA_F_CDF_mean.rds & horizon_point_fore_subnational_err_HDFPCA_M_CDF_mean.rds -> Table 1 (Columns 5 & 10, HDFPCA)
+#############################################################################################################
 
 # Load required setup and functions
 source("load_packages.R")
@@ -138,6 +145,11 @@ saveRDS(point_fore_subnational_err_HDFPCA_M_CDF_K2_mean, file = file.path(dir_re
 
 saveRDS(horizon_point_fore_subnational_err_HDFPCA_F_CDF_mean, file = file.path(dir_results, "horizon_point_fore_subnational_err_HDFPCA_F_CDF_mean.rds"))
 saveRDS(horizon_point_fore_subnational_err_HDFPCA_M_CDF_mean, file = file.path(dir_results, "horizon_point_fore_subnational_err_HDFPCA_M_CDF_mean.rds"))
+
+
+
+
+
 
 ###########################################################
 # Export Datasets for Shiny App

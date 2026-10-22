@@ -1,4 +1,14 @@
+###############################################################################
+# INTERVAL FORECASTING: Conformal / MFTS METHOD (CDF)
+###############################################################################
+#############################################################################################################
+# This script reproduces the interval forecast error results (Conformal) for Multivariate functional time series (MFTS)
+# reported in Table C.1 (Column 2) using the EVR criterion and in Table C.1 (Column 7)
+# using the K = 6 criterion.
 
+# At the end of this script, the saved results in dir.results correspond to:
+# - MFTS_int_fore_subnational_err_F_EVR_conformal_mean.rds & MFTS_int_fore_subnational_err_M_EVR_conformal_mean.rds -> Table C.1 (Column 2, MFTS)
+# - MFTS_int_fore_subnational_err_F_K6_conformal_mean.rds  & MFTS_int_fore_subnational_err_M_K6_conformal_mean.rds  -> Table C.1 (Column 7, MFTS)
 # ==============================================================================
 # Directory Setup & Source Dependencies
 # ==============================================================================

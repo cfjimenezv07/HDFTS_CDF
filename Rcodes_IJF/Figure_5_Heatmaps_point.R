@@ -121,3 +121,4 @@ fig_male   <- plot_heatmap(df_p_male, labels_9m)
 # Save PDF figures
 ggsave(file.path(dir.plots, "Figure5a_Female.pdf"), plot = fig_female, width = 8, height = 9)
 ggsave(file.path(dir.plots, "Figure5b_Male.pdf"),   plot = fig_male,   width = 8, height = 9)
+

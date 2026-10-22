@@ -1,3 +1,14 @@
+###############################################################################
+# INTERVAL FORECASTING: Conformal / UFTS METHOD (CDF)
+###############################################################################
+#############################################################################################################
+# This script reproduces the interval forecast error results (Conformal) for univariate functional time series (UFTS)
+# reported in Table C.1 (Column 1) using the EVR criterion and in Table C.1 (Column 6)
+# using the K = 6 criterion.
+
+# At the end of this script, the saved results in dir.results correspond to:
+# - int_fore_subnational_err_F_EVR_conformal_mean.rds & int_fore_subnational_err_M_EVR_conformal_mean.rds -> Table C.1 (Column 1, UFTS)
+# - int_fore_subnational_err_F_K6_conformal_mean.rds  & int_fore_subnational_err_M_K6_conformal_mean.rds  -> Table C.1 (Column 6, UFTS)
 # ==============================================================================
 # Directory Setup & Source Dependencies
 # ==============================================================================

@@ -1,3 +1,12 @@
+#############################################################################################################
+# This script reproduces the interval forecast error results (Conformal) for Functional Analysis of Variance Method of Jimenez-Varon et al. (2024) (FANOVA)
+# reported in Table C.1 (Column 4) using the EVR criterion and in Table C.1 (Column 9)
+# using the K = 6 criterion.
+
+# At the end of this script, the saved results in dir.results correspond to:
+# - FANOVA_int_fore_subnational_err_F_EVR_conformal_mean & FANOVA_int_fore_subnational_err_M_EVR_conformal_mean -> Table C.1 (Column 4, FANOVA)
+# - FANOVA_int_fore_subnational_err_F_K6_conformal_mean.rds  & FANOVA_int_fore_subnational_err_M_K6_conformal_mean.rds  -> Table C.1 (Column 9, FANOVA)
+#############################################################################################################
 # ==============================================================================
 # Directory Setup & Source Dependencies
 # ==============================================================================
@@ -11,7 +20,7 @@ dir.results <- paste0(here("results", "Results_Interval", "Conformal"), "/")
 dir.shiny2  <- paste0(here("Shiny_App", "datasets_shiny_app", "IFE"), "/")
 
 # Create directories if they do not exist
-if (!dir.exists(dir.r))      dir.create(dir.r, recursive = TRUE)
+if (!dir.exists(dir.results))      dir.create(dir.results, recursive = TRUE)
 if (!dir.exists(dir.shiny2)) dir.create(dir.shiny2, recursive = TRUE)
 
 
@@ -314,12 +323,12 @@ res_K6_095  <- run_fanova_conformal_experiment(method_ncomp = "Fixed", level_sig
 
 save_fanova_results <- function(res, method_label, suffix) {
   # Arrays
-  saveRDS(res$err_F, file.path(dir.r, paste0("FANOVA_int_fore_subnational_err_F_", method_label, "_conformal", suffix, ".rds")))
-  saveRDS(res$err_M, file.path(dir.r, paste0("FANOVA_int_fore_subnational_err_M_", method_label, "_conformal", suffix, ".rds")))
+  saveRDS(res$err_F, file.path(dir.results, paste0("FANOVA_int_fore_subnational_err_F_", method_label, "_conformal", suffix, ".rds")))
+  saveRDS(res$err_M, file.path(dir.results, paste0("FANOVA_int_fore_subnational_err_M_", method_label, "_conformal", suffix, ".rds")))
   
   # Means
-  saveRDS(res$mean_F, file.path(dir.r, paste0("FANOVA_int_fore_subnational_err_F_", method_label, "_conformal", suffix, "_mean.rds")))
-  saveRDS(res$mean_M, file.path(dir.r, paste0("FANOVA_int_fore_subnational_err_M_", method_label, "_conformal", suffix, "_mean.rds")))
+  saveRDS(res$mean_F, file.path(dir.results, paste0("FANOVA_int_fore_subnational_err_F_", method_label, "_conformal", suffix, "_mean.rds")))
+  saveRDS(res$mean_M, file.path(dir.results, paste0("FANOVA_int_fore_subnational_err_M_", method_label, "_conformal", suffix, "_mean.rds")))
 }
 
 # --- level_sig = 0.80 ---

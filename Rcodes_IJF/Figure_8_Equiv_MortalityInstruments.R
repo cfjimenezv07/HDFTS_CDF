@@ -3,10 +3,11 @@
 source("load_packages.R")
 
 # Dynamic Directories
-dir.d       <- here("data", "updated_data/")
-dir.results <- here("results")
-dir.p       <- here("results", "Plots")
-dir.aux     <- here("auxiliary_source")
+dir.d             <- here("data", "updated_data/")
+dir.results       <- here("results")
+dir.p             <- here("results", "Plots")
+dir.aux           <- here("auxiliary_source")
+dir.results.point <- here("results", "Results_Point")
 
 # Ensure output directories exist
 if (!dir.exists(dir.results)) dir.create(dir.results, recursive = TRUE)
@@ -32,8 +33,8 @@ n_year <- length(years)
 
 # Convert from death table forecast to other mortality forecast for HPFCA for fh=1 for the 47 prefectures.
 
-point_fore_subnational_HDFPCA_F_CDF <- readRDS(file.path(dir.results, "HDFPCA_Forecast_F1.rds"))
-point_fore_subnational_HDFPCA_M_CDF <- readRDS(file.path(dir.results, "HDFPCA_Forecast_M1.rds"))
+point_fore_subnational_HDFPCA_F_CDF <- readRDS(file.path(dir.results.point, "HDFPCA_Forecast_F1.rds"))
+point_fore_subnational_HDFPCA_M_CDF <- readRDS(file.path(dir.results.point, "HDFPCA_Forecast_M1.rds"))
 
 i=1 #Hokkaido
 

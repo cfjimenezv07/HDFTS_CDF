@@ -138,5 +138,5 @@ plot_MCS_final <- function(counts_mat, title_label = "") {
 fig_6a <- plot_MCS_final(counts_female, "(a) Female data")
 fig_6b <- plot_MCS_final(counts_male, "(b) Male data")
 
-ggsave(file.path(dir.p, "Figure6a_Female_MCS.pdf"), plot = fig_6a, width = 7.5, height = 7)
-ggsave(file.path(dir.p, "Figure6b_Male_MCS.pdf"), plot = fig_6b, width = 7.5, height = 7)
+ggsave(file.path(dir.p, "FigureD1a_Female_MCS.pdf"), plot = fig_6a, width = 7.5, height = 7)
+ggsave(file.path(dir.p, "FigureD1b_Male_MCS.pdf"), plot = fig_6b, width = 7.5, height = 7)

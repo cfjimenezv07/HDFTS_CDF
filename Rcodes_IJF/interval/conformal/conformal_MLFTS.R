@@ -1,3 +1,11 @@
+#############################################################################################################
+# This script reproduces the interval forecast error results (Conformal) for Multilevel functional time series (MLFTS)
+# reported in Table C.1 (Column 3) using the EVR criterion and in Table C.1 (Column 8)
+# using the K = 6 criterion.
+
+# At the end of this script, the saved results in dir.results correspond to:
+# - MLFTS_int_fore_subnational_err_F_EVR_conformal_mean.rds & MLFTS_int_fore_subnational_err_M_EVR_conformal_mean.rds -> Table C.1 (Column 3, MLFTS)
+# - MLFTS_int_fore_subnational_err_F_K6_conformal_mean.rds  & MLFTS_int_fore_subnational_err_M_K6_conformal_mean.rds  -> Table C.1 (Column 8, MLFTS)
 # ==============================================================================
 # Directory Setup & Source Dependencies
 # ==============================================================================
