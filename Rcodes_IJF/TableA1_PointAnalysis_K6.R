@@ -1,12 +1,14 @@
 ###############################################################################
-# Script: Table1_PointAnalysis_K6.R
-# Description: Reads saved point forecast error .rds files (K = 6) and updates
-#              Table A.1 in exact LaTeX format.
+# Script: TableA1_PointAnalysis_K6.R
+# Description: Reads saved point forecast error .rds files and prints
+#               Table A1 in the LaTeX format used in the paper, while
+#               simultaneously exporting a clean .tex file.
 ###############################################################################
-source("load_packages.R")
+source(here("load_packages.R"))
 
 # Dynamic directory path for Point Forecast results
 dir_results <- here("results", "Results_Point")
+if (!dir.exists(dir_results)) dir.create(dir_results, recursive = TRUE)
 
 # 1. READ ALL RDS FILES FOR POINT FORECASTS (K = 6 CRITERION)
 # ------------------------------------------------------------------------------
@@ -57,65 +59,83 @@ jsd_data <- cbind(
   c(fanova_k6[1:17, 4], mean(fanova_k6[1:17, 4]), median(fanova_k6[1:17, 4]))
 )
 
-# Helper function to generate row string
+# Helper function to generate row string cleanly without hidden spaces
 make_row <- function(label, h_val, vals) {
   val_str <- paste(sapply(vals, fmt), collapse = " & ")
+  lbl_str <- sprintf("%-6s", label)
+  
   if (is.na(h_val)) {
-    return(paste0("    & ", label, " & ", val_str, " \\\\"))
+    return(paste0(lbl_str, " &        & ", val_str, " \\\\"))
   } else {
-    lbl_str <- if (label != "") paste0(label, " ") else "    "
-    return(paste0(lbl_str, "& ", sprintf("%2d", h_val), " & ", val_str, " \\\\"))
+    return(paste0(lbl_str, " & ", sprintf("%4d", h_val), " & ", val_str, " \\\\"))
   }
 }
 
-# 3. PRINT UPDATED LATEX TEMPLATE FOR TABLE A.1
+# 3. GENERATE LATEX TABLE CODE FOR TABLE A.1
 # ------------------------------------------------------------------------------
-cat('\\begin{center}
-\\renewcommand*{\\arraystretch}{0.99}
-\\tabcolsep 0.1in
-\\begin{longtable}{@{}llrrrrrrrr@{}}
-\\caption{\\small Averaged across 47 prefectures, we evaluate and compare the point forecast accuracy of the functional time-series models, measured by the KLD and JSD. The number of components is determined by setting $K=6$.}\\label{tab:appendix_1} \\\\
-\\toprule
-&  & \\multicolumn{4}{c}{Female}   & \\multicolumn{4}{c}{Male}   \\\\
-\\cmidrule{3-10}
-Metric & $h$ & UFTS & MFTS  & MLFTS & FANOVA & UFTS  & MFTS  & MLFTS & FANOVA \\\\
-\\midrule
-\\endfirsthead
-\\toprule
-&  & \\multicolumn{4}{c}{Female}   & \\multicolumn{4}{c}{Male}   \\\\
-\\cmidrule{3-10}
-Metric & $h$ & UFTS & MFTS  & MLFTS & FANOVA & UFTS  & MFTS  & MLFTS & FANOVA \\\\
-\\midrule
-\\endhead
-\\midrule
-\\multicolumn{10}{r}{{Continued on next page}} \\\\
-\\endfoot
-\\endlastfoot\n')
-
-# KLD Rows 1-17
-for (h in 1:17) {
-  lbl <- if (h == 1) "KLD" else ""
-  cat(make_row(lbl, h, kld_data[h, ]), "\n")
+generate_table_code <- function() {
+  lines <- c()
+  
+  lines <- c(lines, '\\begin{center}')
+  lines <- c(lines, '\\renewcommand*{\\arraystretch}{0.99}')
+  lines <- c(lines, '\\tabcolsep 0.1in')
+  lines <- c(lines, '\\begin{longtable}{@{}llrrrrrrrr@{}}')
+  lines <- c(lines, '\\caption{\\small Averaged across 47 prefectures, we evaluate and compare the point forecast accuracy of the functional time-series models, measured by the KLD and JSD. The number of components is determined by setting $K=6$.}\\label{tab:appendix_1} \\\\')
+  lines <- c(lines, '\\toprule')
+  lines <- c(lines, '&   & \\multicolumn{4}{c}{Female}   & \\multicolumn{4}{c}{Male}   \\\\')
+  lines <- c(lines, '\\cmidrule{3-10}')
+  lines <- c(lines, 'Metric & $h$ & UFTS & MFTS  & MLFTS & FANOVA & UFTS  & MFTS  & MLFTS & FANOVA \\\\')
+  lines <- c(lines, '\\midrule')
+  lines <- c(lines, '\\endfirsthead')
+  lines <- c(lines, '\\toprule')
+  lines <- c(lines, '&   & \\multicolumn{4}{c}{Female}   & \\multicolumn{4}{c}{Male}   \\\\')
+  lines <- c(lines, '\\cmidrule{3-10}')
+  lines <- c(lines, 'Metric & $h$ & UFTS & MFTS  & MLFTS & FANOVA & UFTS  & MFTS  & MLFTS & FANOVA \\\\')
+  lines <- c(lines, '\\midrule')
+  lines <- c(lines, '\\endhead')
+  lines <- c(lines, '\\midrule')
+  lines <- c(lines, '\\multicolumn{10}{r}{{Continued on next page}} \\\\')
+  lines <- c(lines, '\\endfoot')
+  lines <- c(lines, '\\endlastfoot')
+  
+  # KLD Rows 1-17
+  for (h in 1:17) {
+    lbl <- if (h == 1) "KLD" else ""
+    lines <- c(lines, make_row(lbl, h, kld_data[h, ]))
+  }
+  
+  # KLD Mean & Median (FIXED RANGE TO 2-10)
+  lines <- c(lines, '\\cmidrule{2-10}')
+  lines <- c(lines, make_row("Mean", NA, kld_data[18, ]))
+  lines <- c(lines, make_row("Median", NA, kld_data[19, ]))
+  lines <- c(lines, '\\midrule')
+  
+  # JSD Rows 1-17
+  for (h in 1:17) {
+    lbl <- if (h == 1) "JSD" else ""
+    lines <- c(lines, make_row(lbl, h, jsd_data[h, ]))
+  }
+  
+  # JSD Mean & Median (FIXED RANGE TO 2-10)
+  lines <- c(lines, '\\cmidrule{2-10}')
+  lines <- c(lines, make_row("Mean", NA, jsd_data[18, ]))
+  lines <- c(lines, make_row("Median", NA, jsd_data[19, ]))
+  
+  lines <- c(lines, '\\bottomrule')
+  lines <- c(lines, '\\end{longtable}')
+  lines <- c(lines, '\\end{center}')
+  
+  return(lines)
 }
 
-# KLD Mean & Median
-cat('\\cmidrule{1-10}\n')
-cat(make_row("Mean", NA, kld_data[18, ]), "\n")
-cat(make_row("Median", NA, kld_data[19, ]), "\n")
-cat('\\midrule\n')
+# 4. PRINT TO CONSOLE & EXPORT FILE
+# ------------------------------------------------------------------------------
+latex_table_lines <- generate_table_code()
 
-# JSD Rows 1-17
-for (h in 1:17) {
-  lbl <- if (h == 1) "JSD" else ""
-  cat(make_row(lbl, h, jsd_data[h, ]), "\n")
-}
+# Print directly to R console
+cat(paste(latex_table_lines, collapse = "\n"), "\n")
 
-# JSD Mean & Median
-cat('\\cmidrule{1-10}\n')
-cat(make_row("Mean", NA, jsd_data[18, ]), "\n")
-cat(make_row("Median", NA, jsd_data[19, ]), "\n")
-
-cat('\\bottomrule
-\\end{longtable}
-\\end{center}\n')
-
+# Export directly to results/Results_Point/TableA1.tex
+output_tex_path <- file.path(dir_results, "TableA1.tex")
+writeLines(latex_table_lines, con = output_tex_path)
+message("\nSuccess: Table A1 LaTeX exported directly to: ", output_tex_path)

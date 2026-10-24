@@ -1,7 +1,7 @@
 # ==============================================================================
 # MODEL CONFIDENCE SET (MCS) ANALYSIS
 # ==============================================================================
-source("load_packages.R")
+source(here("load_packages.R"))
 
 # Subdirectories using project-relative paths
 dir.r <- here("results", "Results_Point")
@@ -9,7 +9,7 @@ dir.p <- here("results", "Plots")
 
 # Ensure output directory exists
 if (!dir.exists(dir.p)) dir.create(dir.p, recursive = TRUE)
-
+set.seed(12345)
 # Model & Horizon Parameters
 n_methods  <- 9
 n_horizons <- 17
@@ -95,7 +95,7 @@ compute_MCS_survival <- function(loss_array) {
 counts_female <- compute_MCS_survival(KLD_F)
 counts_male   <- compute_MCS_survival(KLD_M)
 # ==============================================================================
-# 4. PLOTTING FUNCTION (MATCHING EXACT PAPER STYLE)
+# 4. PLOTTING FUNCTION 
 # ==============================================================================
 plot_MCS_final <- function(counts_mat, title_label = "") {
   

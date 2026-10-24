@@ -1,18 +1,18 @@
-# The rcode below produces Figure 5. Heatmaps for interval forecast results.
+# The R code below produces Figure 6. Heatmaps for interval forecast results.
 
-source("load_packages.R")
+source(here("load_packages.R"))
 
 
 dir.results <- here( "results", "Results_Interval", "sd")
 dir.plots   <- here( "results", "Plots")
 
 if (!dir.exists(dir.plots)) dir.create(dir.plots, recursive = TRUE)
-if(!dir.exists(dir.plots)) dir.create(dir.plots, recursive = TRUE)
+
 
 
 # --- 2. SAFE INTERVAL DATA LOADER ---
 # Loads .rds files, extracts metric_slice (2 = CPD, 3 = Interval Score), 
-# and guarantees output is formatted as [16 horizons x 47 subnationals]
+# and guarantees output is formatted as [16 horizons x 47 prefectures]
 load_interval_res <- function(filename, metric_slice = 2) {
   path <- file.path(dir.results, filename)
   if(!file.exists(path)) stop(paste("File missing:", path))

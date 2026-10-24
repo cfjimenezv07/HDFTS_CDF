@@ -10,7 +10,7 @@
 # ==============================================================================
 # 0. LIBRARIES & DIRECTORIES
 # ==============================================================================
-source("load_packages.R")
+source(here("load_packages.R"))
 
 dir_source  <- here("auxiliary_source")
 dir.results <- paste0(here("results", "Results_Interval", "sd"), "/")
@@ -129,6 +129,8 @@ female_prefecture_fixed_means <- lapply(1:length(part_list), function(k) { Fixed
 # ==============================================================================
 # 3. AUXILIARY FUNCTIONS FOR FORECASTING & INTERVAL TUNING
 # ==============================================================================
+source(file.path(dir_source, "forecast_Arima.R"))
+
 tune_para_find_function <- function(tune_para, resi_mat, sd_val_input, alpha_level, PI_type) {
   n_age <- nrow(resi_mat)
   if (PI_type == "pointwise") {
@@ -247,9 +249,9 @@ interval_fore_FANOVA_cdf <- function(Fixed, Residuals, Holdout, method_ncomp, es
 # 4. LEVEL_SIG = 0.80
 # ==============================================================================
 # --- EVR ---
-int_fore_subnational_err_F_EVR_ETS <- int_fore_subnational_err_M_EVR_ETS <- array(NA, dim = c(47, 16, 3), dimnames = list(state, 1:16, c("ECP", "CPD", "score")))
-int_fore_subnational_err_F_EVR_ETS_tune_para <- int_fore_subnational_err_F_EVR_ETS_tune_para_obj <- 
-  int_fore_subnational_err_M_EVR_ETS_tune_para <- int_fore_subnational_err_M_EVR_ETS_tune_para_obj <- matrix(NA, 47, 16)
+FANOVA_int_fore_subnational_err_F_EVR_ETS <- FANOVA_int_fore_subnational_err_M_EVR_ETS <- array(NA, dim = c(47, 16, 3), dimnames = list(state, 1:16, c("ECP", "CPD", "score")))
+FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para <- FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para_obj <- 
+  FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para <- FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para_obj <- matrix(NA, 47, 16)
 
 for (ij in 1:47) {
   for (iw in 1:16) {
@@ -257,30 +259,30 @@ for (ij in 1:47) {
     dum <- interval_fore_FANOVA_cdf(Fixed = female_prefecture_fixed_means[[ij]], Residuals = female_prefecture_res_means[[ij]],
                                     Holdout = female_prefecture_dx[[ij]], method_ncomp = "EVR", est_method = "cov",
                                     horizon = iw, fore_method = "CDF", uni_fore_method = "ets", level_sig = 0.80)
-    int_fore_subnational_err_F_EVR_ETS[ij, iw, ] <- dum$int_err
-    int_fore_subnational_err_F_EVR_ETS_tune_para[ij, iw] <- dum$tune_para_find
-    int_fore_subnational_err_F_EVR_ETS_tune_para_obj[ij, iw] <- dum$tune_para_find_obj
+    FANOVA_int_fore_subnational_err_F_EVR_ETS[ij, iw, ] <- dum$int_err
+    FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para[ij, iw] <- dum$tune_para_find
+    FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para_obj[ij, iw] <- dum$tune_para_find_obj
     rm(dum)
     
     ## (M)
     dum <- interval_fore_FANOVA_cdf(Fixed = male_prefecture_fixed_means[[ij]], Residuals = male_prefecture_res_means[[ij]],
                                     Holdout = male_prefecture_dx[[ij]], method_ncomp = "EVR", est_method = "cov",
                                     horizon = iw, fore_method = "CDF", uni_fore_method = "ets", level_sig = 0.80)
-    int_fore_subnational_err_M_EVR_ETS[ij, iw, ] <- dum$int_err
-    int_fore_subnational_err_M_EVR_ETS_tune_para[ij, iw] <- dum$tune_para_find
-    int_fore_subnational_err_M_EVR_ETS_tune_para_obj[ij, iw] <- dum$tune_para_find_obj
+    FANOVA_int_fore_subnational_err_M_EVR_ETS[ij, iw, ] <- dum$int_err
+    FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para[ij, iw] <- dum$tune_para_find
+    FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para_obj[ij, iw] <- dum$tune_para_find_obj
     rm(dum); rm(iw)
   }
   print(ij); rm(ij)
 }
 
-horizon_specific_int_fore_subnational_err_F_EVR_ETS <- apply(int_fore_subnational_err_F_EVR_ETS, c(2, 3), mean)
-horizon_specific_int_fore_subnational_err_M_EVR_ETS <- apply(int_fore_subnational_err_M_EVR_ETS, c(2, 3), mean)
+FANOVA_horizon_specific_int_fore_subnational_err_F_EVR_ETS <- apply(FANOVA_int_fore_subnational_err_F_EVR_ETS, c(2, 3), mean)
+FANOVA_horizon_specific_int_fore_subnational_err_M_EVR_ETS <- apply(FANOVA_int_fore_subnational_err_M_EVR_ETS, c(2, 3), mean)
 
 # --- K = 6 ---
-int_fore_subnational_err_F_ETS_K6 <- int_fore_subnational_err_M_ETS_K6 <- array(NA, dim = c(47, 16, 3), dimnames = list(state, 1:16, c("ECP", "CPD", "score")))
-int_fore_subnational_err_F_ETS_tune_para_K6 <- int_fore_subnational_err_F_ETS_tune_para_obj_K6 <- 
-  int_fore_subnational_err_M_ETS_tune_para_K6 <- int_fore_subnational_err_M_ETS_tune_para_obj_K6 <- matrix(NA, 47, 16)
+FANOVA_int_fore_subnational_err_F_ETS_K6 <- FANOVA_int_fore_subnational_err_M_ETS_K6 <- array(NA, dim = c(47, 16, 3), dimnames = list(state, 1:16, c("ECP", "CPD", "score")))
+FANOVA_int_fore_subnational_err_F_ETS_tune_para_K6 <- FANOVA_int_fore_subnational_err_F_ETS_tune_para_obj_K6 <- 
+  FANOVA_int_fore_subnational_err_M_ETS_tune_para_K6 <- FANOVA_int_fore_subnational_err_M_ETS_tune_para_obj_K6 <- matrix(NA, 47, 16)
 
 for (ij in 1:47) {
   for (iw in 1:16) {
@@ -288,33 +290,33 @@ for (ij in 1:47) {
     dum <- interval_fore_FANOVA_cdf(Fixed = female_prefecture_fixed_means[[ij]], Residuals = female_prefecture_res_means[[ij]],
                                     Holdout = female_prefecture_dx[[ij]], method_ncomp = "Fixed", est_method = "cov",
                                     horizon = iw, fore_method = "CDF", uni_fore_method = "ets", level_sig = 0.80)
-    int_fore_subnational_err_F_ETS_K6[ij, iw, ] <- dum$int_err
-    int_fore_subnational_err_F_ETS_tune_para_K6[ij, iw] <- dum$tune_para_find
-    int_fore_subnational_err_F_ETS_tune_para_obj_K6[ij, iw] <- dum$tune_para_find_obj
+    FANOVA_int_fore_subnational_err_F_ETS_K6[ij, iw, ] <- dum$int_err
+    FANOVA_int_fore_subnational_err_F_ETS_tune_para_K6[ij, iw] <- dum$tune_para_find
+    FANOVA_int_fore_subnational_err_F_ETS_tune_para_obj_K6[ij, iw] <- dum$tune_para_find_obj
     rm(dum)
     
     ## (M)
     dum <- interval_fore_FANOVA_cdf(Fixed = male_prefecture_fixed_means[[ij]], Residuals = male_prefecture_res_means[[ij]],
                                     Holdout = male_prefecture_dx[[ij]], method_ncomp = "Fixed", est_method = "cov",
                                     horizon = iw, fore_method = "CDF", uni_fore_method = "ets", level_sig = 0.80)
-    int_fore_subnational_err_M_ETS_K6[ij, iw, ] <- dum$int_err
-    int_fore_subnational_err_M_ETS_tune_para_K6[ij, iw] <- dum$tune_para_find
-    int_fore_subnational_err_M_ETS_tune_para_obj_K6[ij, iw] <- dum$tune_para_find_obj
+    FANOVA_int_fore_subnational_err_M_ETS_K6[ij, iw, ] <- dum$int_err
+    FANOVA_int_fore_subnational_err_M_ETS_tune_para_K6[ij, iw] <- dum$tune_para_find
+    FANOVA_int_fore_subnational_err_M_ETS_tune_para_obj_K6[ij, iw] <- dum$tune_para_find_obj
     rm(dum); rm(iw)
   }
   print(ij); rm(ij)
 }
 
-horizon_specific_int_fore_subnational_err_F_ETS_K6 <- apply(int_fore_subnational_err_F_ETS_K6, c(2, 3), mean)
-horizon_specific_int_fore_subnational_err_M_ETS_K6 <- apply(int_fore_subnational_err_M_ETS_K6, c(2, 3), mean)
+FANOVA_horizon_specific_int_fore_subnational_err_F_ETS_K6 <- apply(FANOVA_int_fore_subnational_err_F_ETS_K6, c(2, 3), mean)
+FANOVA_horizon_specific_int_fore_subnational_err_M_ETS_K6 <- apply(FANOVA_int_fore_subnational_err_M_ETS_K6, c(2, 3), mean)
 
 # ==============================================================================
 # 5. LEVEL_SIG = 0.95
 # ==============================================================================
 # --- EVR ---
-int_fore_subnational_err_F_EVR_ETS_alpha_0.95 <- int_fore_subnational_err_M_EVR_ETS_alpha_0.95 <- array(NA, dim = c(47, 16, 3), dimnames = list(state, 1:16, c("ECP", "CPD", "score")))
-int_fore_subnational_err_F_EVR_ETS_tune_para_alpha_0.95 <- int_fore_subnational_err_F_EVR_ETS_tune_para_obj_alpha_0.95 <- 
-  int_fore_subnational_err_M_EVR_ETS_tune_para_alpha_0.95 <- int_fore_subnational_err_M_EVR_ETS_tune_para_obj_alpha_0.95 <- matrix(NA, 47, 16)
+FANOVA_int_fore_subnational_err_F_EVR_ETS_alpha_0.95 <- FANOVA_int_fore_subnational_err_M_EVR_ETS_alpha_0.95 <- array(NA, dim = c(47, 16, 3), dimnames = list(state, 1:16, c("ECP", "CPD", "score")))
+FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para_alpha_0.95 <- FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para_obj_alpha_0.95 <- 
+  FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para_alpha_0.95 <- FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para_obj_alpha_0.95 <- matrix(NA, 47, 16)
 
 for (ij in 1:47) {
   for (iw in 1:16) {
@@ -322,30 +324,30 @@ for (ij in 1:47) {
     dum <- interval_fore_FANOVA_cdf(Fixed = female_prefecture_fixed_means[[ij]], Residuals = female_prefecture_res_means[[ij]],
                                     Holdout = female_prefecture_dx[[ij]], method_ncomp = "EVR", est_method = "cov",
                                     horizon = iw, fore_method = "CDF", uni_fore_method = "ets", level_sig = 0.95)
-    int_fore_subnational_err_F_EVR_ETS_alpha_0.95[ij, iw, ] <- dum$int_err
-    int_fore_subnational_err_F_EVR_ETS_tune_para_alpha_0.95[ij, iw] <- dum$tune_para_find
-    int_fore_subnational_err_F_EVR_ETS_tune_para_obj_alpha_0.95[ij, iw] <- dum$tune_para_find_obj
+    FANOVA_int_fore_subnational_err_F_EVR_ETS_alpha_0.95[ij, iw, ] <- dum$int_err
+    FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para_alpha_0.95[ij, iw] <- dum$tune_para_find
+    FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para_obj_alpha_0.95[ij, iw] <- dum$tune_para_find_obj
     rm(dum)
     
-    ## (M) - Corrected inputs to male_prefecture_*
+    ## (M)
     dum <- interval_fore_FANOVA_cdf(Fixed = male_prefecture_fixed_means[[ij]], Residuals = male_prefecture_res_means[[ij]],
                                     Holdout = male_prefecture_dx[[ij]], method_ncomp = "EVR", est_method = "cov",
                                     horizon = iw, fore_method = "CDF", uni_fore_method = "ets", level_sig = 0.95)
-    int_fore_subnational_err_M_EVR_ETS_alpha_0.95[ij, iw, ] <- dum$int_err
-    int_fore_subnational_err_M_EVR_ETS_tune_para_alpha_0.95[ij, iw] <- dum$tune_para_find
-    int_fore_subnational_err_M_EVR_ETS_tune_para_obj_alpha_0.95[ij, iw] <- dum$tune_para_find_obj
+    FANOVA_int_fore_subnational_err_M_EVR_ETS_alpha_0.95[ij, iw, ] <- dum$int_err
+    FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para_alpha_0.95[ij, iw] <- dum$tune_para_find
+    FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para_obj_alpha_0.95[ij, iw] <- dum$tune_para_find_obj
     rm(dum); rm(iw)
   }
   print(ij); rm(ij)
 }
 
-horizon_specific_int_fore_subnational_err_F_EVR_ETS_alpha_0.95 <- apply(int_fore_subnational_err_F_EVR_ETS_alpha_0.95, c(2, 3), mean)
-horizon_specific_int_fore_subnational_err_M_EVR_ETS_alpha_0.95 <- apply(int_fore_subnational_err_M_EVR_ETS_alpha_0.95, c(2, 3), mean)
+FANOVA_horizon_specific_int_fore_subnational_err_F_EVR_ETS_alpha_0.95 <- apply(FANOVA_int_fore_subnational_err_F_EVR_ETS_alpha_0.95, c(2, 3), mean)
+FANOVA_horizon_specific_int_fore_subnational_err_M_EVR_ETS_alpha_0.95 <- apply(FANOVA_int_fore_subnational_err_M_EVR_ETS_alpha_0.95, c(2, 3), mean)
 
 # --- K = 6 ---
-int_fore_subnational_err_F_ETS_K6_alpha_0.95 <- int_fore_subnational_err_M_ETS_K6_alpha_0.95 <- array(NA, dim = c(47, 16, 3), dimnames = list(state, 1:16, c("ECP", "CPD", "score")))
-int_fore_subnational_err_F_ETS_tune_para_K6_alpha_0.95 <- int_fore_subnational_err_F_ETS_tune_para_obj_K6_alpha_0.95 <- 
-  int_fore_subnational_err_M_ETS_tune_para_K6_alpha_0.95 <- int_fore_subnational_err_M_ETS_tune_para_obj_K6_alpha_0.95 <- matrix(NA, 47, 16)
+FANOVA_int_fore_subnational_err_F_ETS_K6_alpha_0.95 <- FANOVA_int_fore_subnational_err_M_ETS_K6_alpha_0.95 <- array(NA, dim = c(47, 16, 3), dimnames = list(state, 1:16, c("ECP", "CPD", "score")))
+FANOVA_int_fore_subnational_err_F_ETS_tune_para_K6_alpha_0.95 <- FANOVA_int_fore_subnational_err_F_ETS_tune_para_obj_K6_alpha_0.95 <- 
+  FANOVA_int_fore_subnational_err_M_ETS_tune_para_K6_alpha_0.95 <- FANOVA_int_fore_subnational_err_M_ETS_tune_para_obj_K6_alpha_0.95 <- matrix(NA, 47, 16)
 
 for (ij in 1:47) {
   for (iw in 1:16) {
@@ -353,66 +355,66 @@ for (ij in 1:47) {
     dum <- interval_fore_FANOVA_cdf(Fixed = female_prefecture_fixed_means[[ij]], Residuals = female_prefecture_res_means[[ij]],
                                     Holdout = female_prefecture_dx[[ij]], method_ncomp = "Fixed", est_method = "cov",
                                     horizon = iw, fore_method = "CDF", uni_fore_method = "ets", level_sig = 0.95)
-    int_fore_subnational_err_F_ETS_K6_alpha_0.95[ij, iw, ] <- dum$int_err
-    int_fore_subnational_err_F_ETS_tune_para_K6_alpha_0.95[ij, iw] <- dum$tune_para_find
-    int_fore_subnational_err_F_ETS_tune_para_obj_K6_alpha_0.95[ij, iw] <- dum$tune_para_find_obj
+    FANOVA_int_fore_subnational_err_F_ETS_K6_alpha_0.95[ij, iw, ] <- dum$int_err
+    FANOVA_int_fore_subnational_err_F_ETS_tune_para_K6_alpha_0.95[ij, iw] <- dum$tune_para_find
+    FANOVA_int_fore_subnational_err_F_ETS_tune_para_obj_K6_alpha_0.95[ij, iw] <- dum$tune_para_find_obj
     rm(dum)
     
     ## (M)
     dum <- interval_fore_FANOVA_cdf(Fixed = male_prefecture_fixed_means[[ij]], Residuals = male_prefecture_res_means[[ij]],
                                     Holdout = male_prefecture_dx[[ij]], method_ncomp = "Fixed", est_method = "cov",
                                     horizon = iw, fore_method = "CDF", uni_fore_method = "ets", level_sig = 0.95)
-    int_fore_subnational_err_M_ETS_K6_alpha_0.95[ij, iw, ] <- dum$int_err
-    int_fore_subnational_err_M_ETS_tune_para_K6_alpha_0.95[ij, iw] <- dum$tune_para_find
-    int_fore_subnational_err_M_ETS_tune_para_obj_K6_alpha_0.95[ij, iw] <- dum$tune_para_find_obj
+    FANOVA_int_fore_subnational_err_M_ETS_K6_alpha_0.95[ij, iw, ] <- dum$int_err
+    FANOVA_int_fore_subnational_err_M_ETS_tune_para_K6_alpha_0.95[ij, iw] <- dum$tune_para_find
+    FANOVA_int_fore_subnational_err_M_ETS_tune_para_obj_K6_alpha_0.95[ij, iw] <- dum$tune_para_find_obj
     rm(dum); rm(iw)
   }
   print(ij); rm(ij)
 }
 
-horizon_specific_int_fore_subnational_err_F_ETS_K6_alpha_0.95 <- apply(int_fore_subnational_err_F_ETS_K6_alpha_0.95, c(2, 3), mean)
-horizon_specific_int_fore_subnational_err_M_ETS_K6_alpha_0.95 <- apply(int_fore_subnational_err_M_ETS_K6_alpha_0.95, c(2, 3), mean)
+FANOVA_horizon_specific_int_fore_subnational_err_F_ETS_K6_alpha_0.95 <- apply(FANOVA_int_fore_subnational_err_F_ETS_K6_alpha_0.95, c(2, 3), mean)
+FANOVA_horizon_specific_int_fore_subnational_err_M_ETS_K6_alpha_0.95 <- apply(FANOVA_int_fore_subnational_err_M_ETS_K6_alpha_0.95, c(2, 3), mean)
 
 # ==============================================================================
 # 6. SAVE ALL OBJECTS TO RESULTS DIRECTORY
 # ==============================================================================
 # --- 80% Level ---
-saveRDS(int_fore_subnational_err_F_EVR_ETS, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_EVR_ETS.rds"))
-saveRDS(int_fore_subnational_err_M_EVR_ETS, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_EVR_ETS.rds"))
-saveRDS(int_fore_subnational_err_F_EVR_ETS_tune_para, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para.rds"))
-saveRDS(int_fore_subnational_err_M_EVR_ETS_tune_para, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para.rds"))
-saveRDS(int_fore_subnational_err_F_EVR_ETS_tune_para_obj, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para_obj.rds"))
-saveRDS(int_fore_subnational_err_M_EVR_ETS_tune_para_obj, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para_obj.rds"))
-saveRDS(horizon_specific_int_fore_subnational_err_F_EVR_ETS, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_F_EVR_ETS.rds"))
-saveRDS(horizon_specific_int_fore_subnational_err_M_EVR_ETS, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_M_EVR_ETS.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_F_EVR_ETS, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_EVR_ETS.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_M_EVR_ETS, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_EVR_ETS.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para_obj, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para_obj.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para_obj, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para_obj.rds"))
+saveRDS(FANOVA_horizon_specific_int_fore_subnational_err_F_EVR_ETS, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_F_EVR_ETS.rds"))
+saveRDS(FANOVA_horizon_specific_int_fore_subnational_err_M_EVR_ETS, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_M_EVR_ETS.rds"))
 
-saveRDS(int_fore_subnational_err_F_ETS_K6, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_ETS_K6.rds"))
-saveRDS(int_fore_subnational_err_M_ETS_K6, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_ETS_K6.rds"))
-saveRDS(int_fore_subnational_err_F_ETS_tune_para_K6, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_ETS_tune_para_K6.rds"))
-saveRDS(int_fore_subnational_err_M_ETS_tune_para_K6, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_ETS_tune_para_K6.rds"))
-saveRDS(int_fore_subnational_err_F_ETS_tune_para_obj_K6, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_ETS_tune_para_obj_K6.rds"))
-saveRDS(int_fore_subnational_err_M_ETS_tune_para_obj_K6, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_ETS_tune_para_obj_K6.rds"))
-saveRDS(horizon_specific_int_fore_subnational_err_F_ETS_K6, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_F_ETS_K6.rds"))
-saveRDS(horizon_specific_int_fore_subnational_err_M_ETS_K6, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_M_ETS_K6.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_F_ETS_K6, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_ETS_K6.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_M_ETS_K6, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_ETS_K6.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_F_ETS_tune_para_K6, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_ETS_tune_para_K6.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_M_ETS_tune_para_K6, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_ETS_tune_para_K6.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_F_ETS_tune_para_obj_K6, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_ETS_tune_para_obj_K6.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_M_ETS_tune_para_obj_K6, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_ETS_tune_para_obj_K6.rds"))
+saveRDS(FANOVA_horizon_specific_int_fore_subnational_err_F_ETS_K6, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_F_ETS_K6.rds"))
+saveRDS(FANOVA_horizon_specific_int_fore_subnational_err_M_ETS_K6, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_M_ETS_K6.rds"))
 
 # --- 95% Level ---
-saveRDS(int_fore_subnational_err_F_EVR_ETS_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_alpha_0.95.rds"))
-saveRDS(int_fore_subnational_err_M_EVR_ETS_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_alpha_0.95.rds"))
-saveRDS(int_fore_subnational_err_F_EVR_ETS_tune_para_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para_alpha_0.95.rds"))
-saveRDS(int_fore_subnational_err_M_EVR_ETS_tune_para_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para_alpha_0.95.rds"))
-saveRDS(int_fore_subnational_err_F_EVR_ETS_tune_para_obj_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para_obj_alpha_0.95.rds"))
-saveRDS(int_fore_subnational_err_M_EVR_ETS_tune_para_obj_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para_obj_alpha_0.95.rds"))
-saveRDS(horizon_specific_int_fore_subnational_err_F_EVR_ETS_alpha_0.95, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_F_EVR_ETS_alpha_0.95.rds"))
-saveRDS(horizon_specific_int_fore_subnational_err_M_EVR_ETS_alpha_0.95, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_M_EVR_ETS_alpha_0.95.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_F_EVR_ETS_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_alpha_0.95.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_M_EVR_ETS_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_alpha_0.95.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para_alpha_0.95.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para_alpha_0.95.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para_obj_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_tune_para_obj_alpha_0.95.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para_obj_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_tune_para_obj_alpha_0.95.rds"))
+saveRDS(FANOVA_horizon_specific_int_fore_subnational_err_F_EVR_ETS_alpha_0.95, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_F_EVR_ETS_alpha_0.95.rds"))
+saveRDS(FANOVA_horizon_specific_int_fore_subnational_err_M_EVR_ETS_alpha_0.95, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_M_EVR_ETS_alpha_0.95.rds"))
 
-saveRDS(int_fore_subnational_err_F_ETS_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_ETS_K6_alpha_0.95.rds"))
-saveRDS(int_fore_subnational_err_M_ETS_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_ETS_K6_alpha_0.95.rds"))
-saveRDS(int_fore_subnational_err_F_ETS_tune_para_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_ETS_tune_para_K6_alpha_0.95.rds"))
-saveRDS(int_fore_subnational_err_M_ETS_tune_para_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_ETS_tune_para_K6_alpha_0.95.rds"))
-saveRDS(int_fore_subnational_err_F_ETS_tune_para_obj_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_ETS_tune_para_obj_K6_alpha_0.95.rds"))
-saveRDS(int_fore_subnational_err_M_ETS_tune_para_obj_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_ETS_tune_para_obj_K6_alpha_0.95.rds"))
-saveRDS(horizon_specific_int_fore_subnational_err_F_ETS_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_F_ETS_K6_alpha_0.95.rds"))
-saveRDS(horizon_specific_int_fore_subnational_err_M_ETS_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_M_ETS_K6_alpha_0.95.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_F_ETS_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_ETS_K6_alpha_0.95.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_M_ETS_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_ETS_K6_alpha_0.95.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_F_ETS_tune_para_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_ETS_tune_para_K6_alpha_0.95.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_M_ETS_tune_para_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_ETS_tune_para_K6_alpha_0.95.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_F_ETS_tune_para_obj_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_ETS_tune_para_obj_K6_alpha_0.95.rds"))
+saveRDS(FANOVA_int_fore_subnational_err_M_ETS_tune_para_obj_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_ETS_tune_para_obj_K6_alpha_0.95.rds"))
+saveRDS(FANOVA_horizon_specific_int_fore_subnational_err_F_ETS_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_F_ETS_K6_alpha_0.95.rds"))
+saveRDS(FANOVA_horizon_specific_int_fore_subnational_err_M_ETS_K6_alpha_0.95, file = file.path(dir.results, "FANOVA_horizon_specific_int_fore_subnational_err_M_ETS_K6_alpha_0.95.rds"))
 
 # Results in Tables 3 and B.1 are mean across prefectures
 # Table 3
@@ -422,24 +424,24 @@ FANOVA_int_fore_subnational_err_M_EVR_ETS_mean <- apply(FANOVA_int_fore_subnatio
 FANOVA_int_fore_subnational_err_F_ETS_K6_mean <- apply(FANOVA_int_fore_subnational_err_F_ETS_K6, c(2,3), mean)
 FANOVA_int_fore_subnational_err_M_ETS_K6_mean <- apply(FANOVA_int_fore_subnational_err_M_ETS_K6, c(2,3), mean)
 
-
 saveRDS(FANOVA_int_fore_subnational_err_F_EVR_ETS_mean, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_mean.rds"))
 saveRDS(FANOVA_int_fore_subnational_err_M_EVR_ETS_mean, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_mean.rds"))
 
 saveRDS(FANOVA_int_fore_subnational_err_F_ETS_K6_mean, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_F_ETS_K6_mean.rds"))
 saveRDS(FANOVA_int_fore_subnational_err_M_ETS_K6_mean, file = file.path(dir.results, "FANOVA_int_fore_subnational_err_M_ETS_K6_mean.rds"))
+
 # ==============================================================================
 # 7. EXPORT TO SHINY APP DIRECTORY
 # ==============================================================================
 arrays_list <- list(
-  F_EVR_80 = int_fore_subnational_err_F_EVR_ETS,
-  M_EVR_80 = int_fore_subnational_err_M_EVR_ETS,
-  F_K6_80  = int_fore_subnational_err_F_ETS_K6,
-  M_K6_80  = int_fore_subnational_err_M_ETS_K6,
-  F_EVR_95 = int_fore_subnational_err_F_EVR_ETS_alpha_0.95,
-  M_EVR_95 = int_fore_subnational_err_M_EVR_ETS_alpha_0.95,
-  F_K6_95  = int_fore_subnational_err_F_ETS_K6_alpha_0.95,
-  M_K6_95  = int_fore_subnational_err_M_ETS_K6_alpha_0.95
+  F_EVR_80 = FANOVA_int_fore_subnational_err_F_EVR_ETS,
+  M_EVR_80 = FANOVA_int_fore_subnational_err_M_EVR_ETS,
+  F_K6_80  = FANOVA_int_fore_subnational_err_F_ETS_K6,
+  M_K6_80  = FANOVA_int_fore_subnational_err_M_ETS_K6,
+  F_EVR_95 = FANOVA_int_fore_subnational_err_F_EVR_ETS_alpha_0.95,
+  M_EVR_95 = FANOVA_int_fore_subnational_err_M_EVR_ETS_alpha_0.95,
+  F_K6_95  = FANOVA_int_fore_subnational_err_F_ETS_K6_alpha_0.95,
+  M_K6_95  = FANOVA_int_fore_subnational_err_M_ETS_K6_alpha_0.95
 )
 
 for (name in names(arrays_list)) {

@@ -1,12 +1,14 @@
 ###############################################################################
 # Script: Table1_PointAnalysis_EVR.R
-# Description: Reads saved point forecast error .rds files and updates
-#              Table 1 in exact LaTeX format.
+# Description: Reads saved point forecast error .rds files and prints
+#               Table 1 in the LaTeX format used in the paper, while
+#               simultaneously exporting a clean .tex file.
 ###############################################################################
 source("load_packages.R")
 
 # Dynamic directory path for Point Forecast results
 dir_results <- here("results", "Results_Point")
+if (!dir.exists(dir_results)) dir.create(dir_results, recursive = TRUE)
 
 # 1. READ ALL RDS FILES FOR POINT FORECASTS
 # ------------------------------------------------------------------------------
@@ -37,7 +39,7 @@ fmt <- function(x) sprintf("%.3f", x)
 # Horizons 1 to 17 + Mean + Median
 rows_idx <- c(1:17, "Mean", "Median")
 
-# KLD Data Matrix (Columns: UFTS_F, MFTS_F, MLFTS_F, FANOVA_F, HDFPCA_F, UFTS_M, MFTS_M, MLFTS_M, FANOVA_M, HDFPCA_M)
+# KLD Data Matrix
 kld_data <- cbind(
   ufts_f_evr[rows_idx, "KLD"],
   mfts_f_evr[rows_idx, "KLD"],
@@ -65,66 +67,85 @@ jsd_data <- cbind(
   hdfpca_m_evr[rows_idx, "JSD (geo)"]
 )
 
-# Helper function to generate row string
+# Helper function to generate row string cleanly without hidden spaces
 make_row <- function(label, h_val, vals) {
   val_str <- paste(sapply(vals, fmt), collapse = " & ")
+  lbl_str <- sprintf("%-6s", label)
+  
   if (is.na(h_val)) {
-    return(paste0("     & ", label, " & ", val_str, " \\\\"))
+    return(paste0(lbl_str, " &        & ", val_str, " \\\\"))
   } else {
-    lbl_str <- if (label != "") paste0(label, " ") else "     "
-    return(paste0(lbl_str, "&  ", sprintf("%2d", h_val), " & ", val_str, " \\\\"))
+    return(paste0(lbl_str, " & ", sprintf("%4d", h_val), " & ", val_str, " \\\\"))
   }
 }
 
-# 3. PRINT UPDATED LATEX TEMPLATE
+# 3. GENERATE LATEX TABLE CODE
 # ------------------------------------------------------------------------------
-cat('\\begin{center}
-\\renewcommand*{\\arraystretch}{0.99}
-\\tabcolsep 0.065in
-\\begin{footnotesize}
-\\begin{longtable}{@{}llrrrrrrrrrrr@{}}
-\\caption{\\small Averaged across 47 prefectures, we evaluate and compare the point forecast accuracy of the functional time-series models, measured by the KLD and JSD. The number of components is determined by the EVR criterion.}\\label{tab:1} \\\\
-\\toprule
-&  & \\multicolumn{5}{c}{Female}   & \\multicolumn{5}{c}{Male}   \\\\
-\\cmidrule{3-13}
-Metric & $h$ & UFTS & MFTS  & MLFTS & FANOVA & HDFPCA & UFTS  & MFTS  & MLFTS & FANOVA & HDFPCA \\\\ 
-\\midrule
-\\endfirsthead
-\\toprule
-&  & \\multicolumn{5}{c}{Female}   & \\multicolumn{5}{c}{Male}   \\\\
-\\cmidrule{3-13}
-Metric & $h$ & UFTS & MFTS  & MLFTS & FANOVA & HDFPCA & UFTS  & MFTS  & MLFTS & FANOVA & HDFPCA \\\\ 
-\\midrule
-\\endhead
-\\midrule
-\\multicolumn{13}{r}{{Continued on next page}} \\\\
-\\endfoot
-\\endlastfoot\n')
-
-# KLD Rows 1-17
-for (h in 1:17) {
-  lbl <- if (h == 1) "KLD" else ""
-  cat(make_row(lbl, h, kld_data[h, ]), "\n")
+generate_table_code <- function() {
+  lines <- c()
+  
+  lines <- c(lines, '\\begin{center}')
+  lines <- c(lines, '\\renewcommand*{\\arraystretch}{0.99}')
+  lines <- c(lines, '\\tabcolsep 0.065in')
+  lines <- c(lines, '\\begin{footnotesize}')
+  lines <- c(lines, '\\begin{longtable}{@{}llrrrrrrrrrrr@{}}')
+  lines <- c(lines, '\\caption{\\small Averaged across 47 prefectures, we evaluate and compare the point forecast accuracy of the functional time-series models, measured by the KLD and JSD. The number of components is determined by the EVR criterion.}\\label{tab:1} \\\\')
+  lines <- c(lines, '\\toprule')
+  lines <- c(lines, '&   & \\multicolumn{5}{c}{Female}   & \\multicolumn{5}{c}{Male}   \\\\')
+  lines <- c(lines, '\\cmidrule{3-13}')
+  lines <- c(lines, 'Metric & $h$ & UFTS & MFTS  & MLFTS & FANOVA & HDFPCA & UFTS  & MFTS  & MLFTS & FANOVA & HDFPCA \\\\')
+  lines <- c(lines, '\\midrule')
+  lines <- c(lines, '\\endfirsthead')
+  lines <- c(lines, '\\toprule')
+  lines <- c(lines, '&   & \\multicolumn{5}{c}{Female}   & \\multicolumn{5}{c}{Male}   \\\\')
+  lines <- c(lines, '\\cmidrule{3-13}')
+  lines <- c(lines, 'Metric & $h$ & UFTS & MFTS  & MLFTS & FANOVA & HDFPCA & UFTS  & MFTS  & MLFTS & FANOVA & HDFPCA \\\\')
+  lines <- c(lines, '\\midrule')
+  lines <- c(lines, '\\endhead')
+  lines <- c(lines, '\\midrule')
+  lines <- c(lines, '\\multicolumn{13}{r}{{Continued on next page}} \\\\')
+  lines <- c(lines, '\\endfoot')
+  lines <- c(lines, '\\endlastfoot')
+  
+  # KLD Rows 1-17
+  for (h in 1:17) {
+    lbl <- if (h == 1) "KLD" else ""
+    lines <- c(lines, make_row(lbl, h, kld_data[h, ]))
+  }
+  
+  # KLD Mean & Median
+  lines <- c(lines, '\\cmidrule{2-13}')
+  lines <- c(lines, make_row("Mean", NA, kld_data[18, ]))
+  lines <- c(lines, make_row("Median", NA, kld_data[19, ]))
+  lines <- c(lines, '\\midrule')
+  
+  # JSD Rows 1-17
+  for (h in 1:17) {
+    lbl <- if (h == 1) "JSD" else ""
+    lines <- c(lines, make_row(lbl, h, jsd_data[h, ]))
+  }
+  
+  # JSD Mean & Median
+  lines <- c(lines, '\\cmidrule{2-13}')
+  lines <- c(lines, make_row("Mean", NA, jsd_data[18, ]))
+  lines <- c(lines, make_row("Median", NA, jsd_data[19, ]))
+  
+  lines <- c(lines, '\\bottomrule')
+  lines <- c(lines, '\\end{longtable}')
+  lines <- c(lines, '\\end{footnotesize}')
+  lines <- c(lines, '\\end{center}')
+  
+  return(lines)
 }
 
-# KLD Mean & Median
-cat('\\cmidrule{2-12} \n')
-cat(make_row("Mean", NA, kld_data[18, ]), "\n")
-cat(make_row("Median", NA, kld_data[19, ]), "\n")
-cat('\\midrule\n')
+# 4. PRINT TO CONSOLE & EXPORT FILE
+# ------------------------------------------------------------------------------
+latex_table_lines <- generate_table_code()
 
-# JSD Rows 1-17
-for (h in 1:17) {
-  lbl <- if (h == 1) "JSD" else ""
-  cat(make_row(lbl, h, jsd_data[h, ]), "\n")
-}
+# Print directly to R console
+cat(paste(latex_table_lines, collapse = "\n"), "\n")
 
-# JSD Mean & Median
-cat('\\cmidrule{2-12}  \n')
-cat(make_row("Mean", NA, jsd_data[18, ]), "\n")
-cat(make_row("Median", NA, jsd_data[19, ]), "\n")
-
-cat('\\bottomrule
-\\end{longtable}
-\\end{footnotesize}
-\\end{center}\n')
+# Export directly to results/Table1.tex
+output_tex_path <- file.path(dir_results, "Table1.tex")
+writeLines(latex_table_lines, con = output_tex_path)
+message("\nSuccess: Table 1 LaTeX exported directly to: ", output_tex_path)

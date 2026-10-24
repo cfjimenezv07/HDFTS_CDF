@@ -12,11 +12,11 @@
 # ==============================================================================
 # Directory Setup & Source Dependencies
 # ==============================================================================
-source("load_packages.R")
+source(here("load_packages.R"))
 source(here("auxiliary_source", "auxiliary_interval.R"))
 
 # --- Define Output Directories ---
-dir.results <- paste0(here("results", "Results_Interval", "Conformal"), "/")
+dir.results <- paste0(here("results", "Results_Interval", "conformal"), "/")
 dir.shiny2  <- paste0(here("Shiny_App", "datasets_shiny_app", "IFE"), "/")
 
 # Create directories if they do not exist
@@ -156,7 +156,7 @@ save_results <- function(res, method_label, suffix) {
   saveRDS(res$mean_M, file.path(dir.results, paste0("int_fore_subnational_err_M_", method_label, "_conformal", suffix, "_mean.rds")))
 }
 
-# --- level_sig = 0.80 (No alpha suffix in your original logic) ---
+# --- level_sig = 0.80---
 save_results(res_EVR_080, "EVR", "")
 save_results(res_K6_080,  "K6",  "")
 

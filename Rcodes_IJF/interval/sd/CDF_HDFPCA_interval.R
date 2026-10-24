@@ -8,7 +8,7 @@
 # ==============================================================================
 # File Directory Setup
 # ==============================================================================
-source("load_packages.R")
+source(here("load_packages.R"))
 
 dir_source  <- here("auxiliary_source")
 dir.results <- paste0(here("results", "Results_Interval", "sd"), "/")

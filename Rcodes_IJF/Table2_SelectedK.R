@@ -1,9 +1,9 @@
 ###############################################################################
-# Script: table2_component_selection.R
+# Script: Table2_selectedK.R
 # Description: EVR Component Selection for UFTS, MFTS, MLFTS, and FANOVA
 #              Produces Table 2 (Selected K counts across forecasting horizons)
 ###############################################################################
-source("load_packages.R")
+source(here("load_packages.R"))
 
 # Relative Directory Paths
 dir_data    <- here("data")
@@ -42,7 +42,7 @@ select_K <- function(tau, eigenvalue) {
   return(which.min(k_all))
 }
 
-# Cumulative Density Function preparation on logit scale
+# cumulative distribution Function preparation on logit scale
 prep_data_safe <- function(d) {
   d_norm   <- d / 10^5
   d_cumsum <- t(apply(d_norm, 1, cumsum))

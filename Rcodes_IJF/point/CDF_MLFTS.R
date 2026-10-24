@@ -9,7 +9,7 @@
 #############################################################################################################
 
 # Load required setup and functions
-source("load_packages.R")
+source(here("load_packages.R"))
 source(here("auxiliary_source", "auxiliary_point.R"))
 
 # Base paths using project-relative paths

@@ -11,7 +11,7 @@
 # ==============================================================================
 # 0. SETUP & DEPENDENCIES
 # ==============================================================================
-source("load_packages.R")
+source(here("load_packages.R"))
 
 # Directories
 dir_source  <- here("auxiliary_source")
@@ -19,8 +19,9 @@ dir.results <- paste0(here("results", "Results_Interval", "sd"), "/")
 dir.shiny2  <- paste0(here("Shiny_App", "datasets_shiny_app", "IFE"), "/")
 
 # Source auxiliary scripts
-source(file.path(dir_source, "auxiliary_interval.R"))
 source(file.path(dir_source, "auxiliary_point.R"))
+source(file.path(dir_source, "auxiliary_interval.R"))
+
 
 # Create output directories if they don't exist
 if (!dir.exists(dir.results)) dir.create(dir.results, recursive = TRUE)

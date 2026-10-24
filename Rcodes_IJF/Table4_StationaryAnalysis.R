@@ -1,9 +1,9 @@
 ###############################################################################
 # Script: Table4_StationaryAnalysis.R
-# Description: Summary of the stationary analysis of the FTS
+# Description: Stationary analysis of the FTS
 #              Produces Table 4 
 ###############################################################################
-source("load_packages.R")
+source(here("load_packages.R"))
 
 # Dynamic Directories
 dir.d       <- here("data", "updated_data/")
@@ -121,7 +121,7 @@ female_res <- lapply(part_list, function(k) t(Res2_means[k, ]))
 
 
 # --- 6. Functional Stationarity Tests (ftsa) ---
-center_matrix_corrected <- function(mat) {
+center_columns <- function(mat) {
   col_means <- colMeans(mat)
   sweep(mat, MARGIN = 2, STATS = col_means, FUN = "-")
 }
@@ -131,7 +131,7 @@ run_prefecture_stationarity <- function(data_list, alpha = 0.05) {
   pvals <- numeric(length(data_list))
   
   for (i in seq_along(data_list)) {
-    mat_centered <- center_matrix_corrected(data_list[[i]])
+    mat_centered <- center_columns(data_list[[i]])
     output_text <- capture.output(
       T_stationary(
         sample = mat_centered, L = 49, J = 500, MC_rep = 1000,

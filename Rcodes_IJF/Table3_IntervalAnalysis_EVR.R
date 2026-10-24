@@ -1,34 +1,36 @@
 ###############################################################################
 # Script: Table3_IntervalAnalysis_EVR.R
-# Description: Reads saved interval forecast error (SD) .rds files and updates
-#              Table 3 in exact LaTeX format.
+# Description: Reads saved interval forecast error (sd) .rds files and prints
+#               Table 3 in the LaTeX format used in the paper, while
+#               simultaneously exporting a clean .tex file.
 ###############################################################################
-source("load_packages.R")
+source(here("load_packages.R"))
 
 # Dynamic directory path for Interval Forecast (SD) results
-dir.results <- paste0(here("results", "Results_Interval", "sd"), "/")
+dir_results <- here("results", "Results_Interval", "sd")
+if (!dir.exists(dir_results)) dir.create(dir_results, recursive = TRUE)
 
 # 1. READ ALL RDS FILES FOR INTERVAL FORECASTS (SD, EVR CRITERION)
 # ------------------------------------------------------------------------------
 # UFTS
-ufts_f_int_evr <- readRDS(file.path(dir.results, "int_fore_subnational_err_F_EVR_ETS_mean.rds"))
-ufts_m_int_evr <- readRDS(file.path(dir.results, "int_fore_subnational_err_M_EVR_ETS_mean.rds"))
+ufts_f_int_evr <- readRDS(file.path(dir_results, "int_fore_subnational_err_F_EVR_ETS_mean.rds"))
+ufts_m_int_evr <- readRDS(file.path(dir_results, "int_fore_subnational_err_M_EVR_ETS_mean.rds"))
 
 # MFTS
-mfts_f_int_evr <- readRDS(file.path(dir.results, "MFTS_int_fore_subnational_err_F_EVR_ETS_mean.rds"))
-mfts_m_int_evr <- readRDS(file.path(dir.results, "MFTS_int_fore_subnational_err_M_EVR_ETS_mean.rds"))
+mfts_f_int_evr <- readRDS(file.path(dir_results, "MFTS_int_fore_subnational_err_F_EVR_ETS_mean.rds"))
+mfts_m_int_evr <- readRDS(file.path(dir_results, "MFTS_int_fore_subnational_err_M_EVR_ETS_mean.rds"))
 
 # MLFTS
-mlfts_f_int_evr <- readRDS(file.path(dir.results, "MLFTS_int_fore_subnational_err_F_EVR_ETS_mean.rds"))
-mlfts_m_int_evr <- readRDS(file.path(dir.results, "MLFTS_int_fore_subnational_err_M_EVR_ETS_mean.rds"))
+mlfts_f_int_evr <- readRDS(file.path(dir_results, "MLFTS_int_fore_subnational_err_F_EVR_ETS_mean.rds"))
+mlfts_m_int_evr <- readRDS(file.path(dir_results, "MLFTS_int_fore_subnational_err_M_EVR_ETS_mean.rds"))
 
 # FANOVA
-fanova_f_int_evr <- readRDS(file.path(dir.results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_mean.rds"))
-fanova_m_int_evr <- readRDS(file.path(dir.results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_mean.rds"))
+fanova_f_int_evr <- readRDS(file.path(dir_results, "FANOVA_int_fore_subnational_err_F_EVR_ETS_mean.rds"))
+fanova_m_int_evr <- readRDS(file.path(dir_results, "FANOVA_int_fore_subnational_err_M_EVR_ETS_mean.rds"))
 
 # HDFPCA
-hdfpca_f_int_evr <- readRDS(file.path(dir.results, "horizon_specific_hdfpca_int_fore_subnational_err_F_EVR_ETS_CDF.rds"))
-hdfpca_m_int_evr <- readRDS(file.path(dir.results, "horizon_specific_hdfpca_int_fore_subnational_err_M_EVR_ETS_CDF.rds"))
+hdfpca_f_int_evr <- readRDS(file.path(dir_results, "horizon_specific_hdfpca_int_fore_subnational_err_F_EVR_ETS_CDF.rds"))
+hdfpca_m_int_evr <- readRDS(file.path(dir_results, "horizon_specific_hdfpca_int_fore_subnational_err_M_EVR_ETS_CDF.rds"))
 
 # 2. EXTRACT CPD & SCORE VALUES
 # ------------------------------------------------------------------------------
@@ -69,66 +71,84 @@ score_data <- cbind(
 
 # Helper function to generate row string
 make_row <- function(label, h_val, vals, is_score = FALSE) {
-  fmt_fn <- if (is_score) fmt_score else fmt_cpd
+  fmt_fn  <- if (is_score) fmt_score else fmt_cpd
   val_str <- paste(sapply(vals, fmt_fn), collapse = " & ")
+  lbl_str <- sprintf("%-25s", label)
+  
   if (is.na(h_val)) {
-    return(paste0("\t& ", label, " & ", val_str, " \\\\"))
+    return(paste0(lbl_str, " &        & ", val_str, " \\\\"))
   } else {
-    lbl_str <- if (label != "") label else ""
-    return(paste0(lbl_str, " & ", h_val, " & ", val_str, " \\\\"))
+    return(paste0(lbl_str, " & ", sprintf("%4d", h_val), " & ", val_str, " \\\\"))
   }
 }
 
-# 3. PRINT UPDATED LATEX TEMPLATE FOR TABLE 3
+# 3. GENERATE LATEX TABLE CODE FOR TABLE 3
 # ------------------------------------------------------------------------------
-cat('\\begin{center}
-\\renewcommand*{\\arraystretch}{1}
-\\tabcolsep 0.065in
-\\begin{footnotesize}
-\\begin{longtable}{@{}llrrrrrrrrrrr@{}}
-\\caption{\\small Averaged across 47 prefectures, we evaluate and compare the interval forecast accuracy, as measured by the CPD and interval score, for the nine functional time-series models at the significance level $\\alpha=0.2$. The number of components is determined by the EVR criterion.}\\label{tab:2} \\\\
-\\toprule
-&   & \\multicolumn{5}{c}{Female}   & \\multicolumn{5}{c}{Male}   \\\\
-  \\cmidrule{3-13}
-Metric & $h$ & UFTS & MFTS  & MLFTS  & FANOVA & HDFPCA & UFTS  & MFTS  & MLFTS  & FANOVA & HDFPCA \\\\ 
-  \\midrule
-\\endfirsthead
-\\toprule
-&   & \\multicolumn{5}{c}{Female}   & \\multicolumn{5}{c}{Male}   \\\\
-  \\cmidrule{3-13}
-Metric & $h$ & UFTS & MFTS  & MLFTS  & FANOVA & HDFPCA & UFTS  & MFTS  & MLFTS  & FANOVA & HDFPCA \\\\ 
-  \\midrule
-\\endhead
-\\midrule
-\\multicolumn{13}{r}{{Continued on next page}} \\\\
-\\endfoot
-\\endlastfoot\n')
-
-# CPD Rows 1-16
-for (h in 1:16) {
-  lbl <- if (h == 1) "$\\overline{\\text{CPD}}_{0.2}$" else ""
-  cat(make_row(lbl, h, cpd_data[h, ], is_score = FALSE), "\n")
+generate_table_code <- function() {
+  lines <- c()
+  
+  lines <- c(lines, '\\begin{center}')
+  lines <- c(lines, '\\renewcommand*{\\arraystretch}{1}')
+  lines <- c(lines, '\\tabcolsep 0.065in')
+  lines <- c(lines, '\\begin{footnotesize}')
+  lines <- c(lines, '\\begin{longtable}{@{}llrrrrrrrrrrr@{}}')
+  lines <- c(lines, '\\caption{\\small Averaged across 47 prefectures, we evaluate and compare the interval forecast accuracy, as measured by the CPD and interval score, for the nine functional time series models at the significance level $\alpha=0.2$. The number of components is determined by the EVR criterion. We highlight the method with the smallest overall $\overline{\text{CPD}}$ and $\overline{S}_{0.2}$. }\\label{tab:2} \\\\')
+  lines <- c(lines, '\\toprule')
+  lines <- c(lines, '&   & \\multicolumn{5}{c}{Female}   & \\multicolumn{5}{c}{Male}   \\\\')
+  lines <- c(lines, '\\cmidrule{3-13}')
+  lines <- c(lines, 'Metric & $h$ & UFTS & MFTS  & MLFTS  & FANOVA & HDFPCA & UFTS  & MFTS  & MLFTS  & FANOVA & HDFPCA \\\\')
+  lines <- c(lines, '\\midrule')
+  lines <- c(lines, '\\endfirsthead')
+  lines <- c(lines, '\\toprule')
+  lines <- c(lines, '&   & \\multicolumn{5}{c}{Female}   & \\multicolumn{5}{c}{Male}   \\\\')
+  lines <- c(lines, '\\cmidrule{3-13}')
+  lines <- c(lines, 'Metric & $h$ & UFTS & MFTS  & MLFTS  & FANOVA & HDFPCA & UFTS  & MFTS  & MLFTS  & FANOVA & HDFPCA \\\\')
+  lines <- c(lines, '\\midrule')
+  lines <- c(lines, '\\endhead')
+  lines <- c(lines, '\\midrule')
+  lines <- c(lines, '\\multicolumn{13}{r}{{Continued on next page}} \\\\')
+  lines <- c(lines, '\\endfoot')
+  lines <- c(lines, '\\endlastfoot')
+  
+  # CPD Rows 1-16
+  for (h in 1:16) {
+    lbl <- if (h == 1) "$\\overline{\\text{CPD}}_{0.2}$" else ""
+    lines <- c(lines, make_row(lbl, h, cpd_data[h, ], is_score = FALSE))
+  }
+  
+  # CPD Mean & Median (FIXED RANGE TO 2-13)
+  lines <- c(lines, '\\cmidrule{2-13}')
+  lines <- c(lines, make_row("Mean", NA, cpd_data[17, ], is_score = FALSE))
+  lines <- c(lines, make_row("Median", NA, cpd_data[18, ], is_score = FALSE))
+  lines <- c(lines, '\\midrule')
+  
+  # Interval Score Rows 1-16
+  for (h in 1:16) {
+    lbl <- if (h == 1) "$\\overline{S}_{0.2}$" else ""
+    lines <- c(lines, make_row(lbl, h, score_data[h, ], is_score = TRUE))
+  }
+  
+  # Interval Score Mean & Median (FIXED RANGE TO 2-13)
+  lines <- c(lines, '\\cmidrule{2-13}')
+  lines <- c(lines, make_row("Mean", NA, score_data[17, ], is_score = TRUE))
+  lines <- c(lines, make_row("Median", NA, score_data[18, ], is_score = TRUE))
+  
+  lines <- c(lines, '\\bottomrule')
+  lines <- c(lines, '\\end{longtable}')
+  lines <- c(lines, '\\end{footnotesize}')
+  lines <- c(lines, '\\end{center}')
+  
+  return(lines)
 }
 
-# CPD Mean & Median
-cat('\\cmidrule{2-12}\n')
-cat(make_row("Mean", NA, cpd_data[17, ], is_score = FALSE), "\n")
-cat(make_row("Median", NA, cpd_data[18, ], is_score = FALSE), "\n")
-cat('\\midrule\n')
+# 4. PRINT TO CONSOLE & EXPORT FILE
+# ------------------------------------------------------------------------------
+latex_table_lines <- generate_table_code()
 
-# Interval Score Rows 1-16
-for (h in 1:16) {
-  lbl <- if (h == 1) "$\\overline{S}_{0.2}$" else ""
-  cat(make_row(lbl, h, score_data[h, ], is_score = TRUE), "\n")
-}
+# Print directly to R console
+cat(paste(latex_table_lines, collapse = "\n"), "\n")
 
-# Interval Score Mean & Median
-cat('\\cmidrule{2-12}\n')
-cat(make_row("Mean", NA, score_data[17, ], is_score = TRUE), "\n")
-cat(make_row("Median", NA, score_data[18, ], is_score = TRUE), "\n")
-
-cat('\\bottomrule
-\\end{longtable}
-\\end{footnotesize}
-\\end{center}\n')
-
+# Export directly to results/Results_Interval/sd/Table3.tex
+output_tex_path <- file.path(dir_results, "Table3.tex")
+writeLines(latex_table_lines, con = output_tex_path)
+message("\nSuccess: Table 3 LaTeX exported directly to: ", output_tex_path)

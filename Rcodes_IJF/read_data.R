@@ -3,7 +3,7 @@
 # Description: Processes Japanese subnational mortality data and saves dx matrices
 ###############################################################################
 # Load packages 
-source("load_packages.R")
+source(here("load_packages.R"))
 
 # Dynamic Directories using project-relative paths
 dir_data     <- here("data")
@@ -11,12 +11,22 @@ dir_data_raw <- here("data", "updated_data")
 dir_results  <- here("results")
 
 
-dirs_to_create <- c(dir_data , dir_data_raw, dir_results) 
-
+# Ensure output directories exist
+dirs_to_create <- c(dir_data, dir_results) 
 for (d in dirs_to_create) {
   if (!dir.exists(d)) {
     dir.create(d, recursive = TRUE, showWarnings = FALSE)
   }
+}
+
+# Check if raw data files are present before proceeding
+raw_files <- list.files(dir_data_raw, pattern = "\\.txt$")
+if (!dir.exists(dir_data_raw) || length(raw_files) == 0) {
+  stop(
+    "Directory 'data/updated_data/' is missing or contains no raw '.txt' files.\n",
+    "Please place the Japanese prefecture mortality text files (e.g., female_prefecture_1.txt) ",
+    "into 'data/updated_data/' before running read_data.R."
+  )
 }
 
 # Define study constants

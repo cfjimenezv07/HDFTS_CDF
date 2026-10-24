@@ -1,4 +1,4 @@
-source("load_packages.R")
+source(here("load_packages.R"))
 
 # Subdirectories
 dir.data    <- here("data/")
@@ -9,10 +9,6 @@ dir.plots   <- here("results", "Plots")
 # Create output directories if they do not exist
 if(!dir.exists(dir.plots)) dir.create(dir.plots, recursive = TRUE)
 if(!dir.exists(dir.results)) dir.create(dir.results, recursive = TRUE)
-
-# Library 
-library(ftsa)
-
 
 Japan_female_pop <- readRDS(paste0(dir.data, "Japan_female_pop.rds"))
 Japan_male_pop   <- readRDS(paste0(dir.data, "Japan_male_pop.rds"))

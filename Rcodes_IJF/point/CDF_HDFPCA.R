@@ -141,7 +141,7 @@ saveRDS(point_fore_subnational_err_HDFPCA_F_CDF_mean, file = file.path(dir_resul
 saveRDS(point_fore_subnational_err_HDFPCA_M_CDF_mean, file = file.path(dir_results, "point_fore_subnational_err_HDFPCA_M_CDF_mean.rds"))
 
 saveRDS(point_fore_subnational_err_HDFPCA_F_CDF_K2_mean, file = file.path(dir_results, "point_fore_subnational_err_HDFPCA_F_CDF_K2_mean.rds"))
-saveRDS(point_fore_subnational_err_HDFPCA_M_CDF_K2_mean, file = file.path(dir_results, "point_fore_subnational_err_M_CDF_K2_mean.rds"))
+saveRDS(point_fore_subnational_err_HDFPCA_M_CDF_K2_mean, file = file.path(dir_results, "point_fore_subnational_err_HDFPCA_M_CDF_K2_mean.rds"))
 
 saveRDS(horizon_point_fore_subnational_err_HDFPCA_F_CDF_mean, file = file.path(dir_results, "horizon_point_fore_subnational_err_HDFPCA_F_CDF_mean.rds"))
 saveRDS(horizon_point_fore_subnational_err_HDFPCA_M_CDF_mean, file = file.path(dir_results, "horizon_point_fore_subnational_err_HDFPCA_M_CDF_mean.rds"))

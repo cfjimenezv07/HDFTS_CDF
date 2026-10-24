@@ -11,7 +11,7 @@
 # - MFTS_int_fore_subnational_err_F_K6_ETS_mean.rds  & MFTS_int_fore_subnational_err_M_K6_ETS_mean.rds  -> Table B.1 (Columns 2 & 6, MFTS)
 #############################################################################################################
 # --- Source Auxiliary Functions ---
-source("load_packages.R")
+source(here("load_packages.R"))
 source(here("auxiliary_source", "auxiliary_interval.R"))
 
 # --- Define Output Directories ---

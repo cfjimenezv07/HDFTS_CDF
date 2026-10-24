@@ -29,7 +29,7 @@ KLD <- function(forecast, true)
   return(round(err, 6))
 }
 
-# Jenson-Shannon divergence for densities with simple mean
+# Jensenn-Shannon divergence for densities with simple mean
 
 JSD_simple <- function(forecast, true)
 {
@@ -44,7 +44,7 @@ JSD_simple <- function(forecast, true)
   return(round(err, 6))
 }
 
-# Jenson-Shannon divergence for densities with geometric mean
+# Jensen-Shannon divergence for densities with geometric mean
 
 JSD_geom <- function(forecast, true)
 {

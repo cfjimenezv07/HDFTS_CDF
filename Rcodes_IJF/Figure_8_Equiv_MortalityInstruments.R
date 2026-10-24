@@ -1,6 +1,6 @@
-# This Rcode produces Figure 8 in the paper. It shows the equivalences between different mortality instruments.
+# This R code produces Figure 8 in the paper. It shows the equivalences between different mortality instruments.
 
-source("load_packages.R")
+source(here("load_packages.R"))
 
 # Dynamic Directories
 dir.d             <- here("data", "updated_data/")
@@ -31,7 +31,7 @@ years <- 1975:2023
 n_year <- length(years)
 
 
-# Convert from death table forecast to other mortality forecast for HPFCA for fh=1 for the 47 prefectures.
+# Convert from death table forecast to other mortality forecast for HDFPCA for h=1 for the 47 prefectures.
 
 point_fore_subnational_HDFPCA_F_CDF <- readRDS(file.path(dir.results.point, "HDFPCA_Forecast_F1.rds"))
 point_fore_subnational_HDFPCA_M_CDF <- readRDS(file.path(dir.results.point, "HDFPCA_Forecast_M1.rds"))

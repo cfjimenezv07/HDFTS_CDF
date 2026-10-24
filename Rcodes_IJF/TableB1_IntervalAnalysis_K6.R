@@ -1,9 +1,9 @@
 ###############################################################################
 # Script: TableB1_IntervalAnalysis_K6.R
-# Description: Reads saved interval forecast error (SD, K = 6) .rds files 
-#              and updates Table B.1 in exact LaTeX format.
+# Description: Reads saved intervsal forecast error (K6) .rds files and prints
+#               Table B1 in the LaTeX format used in the paper.
 ###############################################################################
-source("load_packages.R")
+source(here("load_packages.R"))
 
 # Dynamic directory path for Interval Forecast (SD) results
 dir.results <- paste0(here("results", "Results_Interval", "sd"), "/")
@@ -77,7 +77,7 @@ cat('\\begin{center}
 \\renewcommand*{\\arraystretch}{0.96}
 \\tabcolsep 0.1in
 \\begin{longtable}{@{}llrrrrrrrr@{}}
-\\caption{\\small Averaged across 47 prefectures, we evaluate and compare the interval forecast accuracy, as measured by the CPD and interval score, among the functional time-series models at the level of significance $\\alpha=0.2$. The number of components is determined by setting $K=6$. For either females or males, we highlight the method with the smallest overall CPD and interval scores.}\\label{tab:appendix_2_K6}\\\\
+\\caption{\\small Averaged across 47 prefectures, we evaluate and compare the interval forecast accuracy, as measured by the CPD and interval score, among the functional time series models at the level of significance $\alpha=0.2$. The number of components is determined by setting $K=6$. For either females or males, we highlight the method with the smallest overall CPD and interval scores.}\\label{tab:appendix_2_K6}\\\\
 \\toprule  
   & & \\multicolumn{4}{c}{Female}   & \\multicolumn{4}{c}{Male}   \\\\
   Metric & $h$ & UFTS & MFTS & MLFTS & FANOVA & UFTS & MFTS & MLFTS & FANOVA \\\\

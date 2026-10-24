@@ -9,7 +9,7 @@
 #############################################################################################################
 
 # Load helper sources
-source("load_packages.R")
+source(here("load_packages.R"))
 source(here("auxiliary_source", "auxiliary_point.R"))
 source(here("auxiliary_source", "CDF_transformation.R"))
 source(here("auxiliary_source", "forecast_errors.R"))
@@ -27,6 +27,7 @@ for (d in dirs_to_create) {
 }
 
 # Dataset parameters
+set.seed(12345)
 year         <- 1975:2023
 n_year       <- length(year)
 age          <- 0:110
@@ -151,15 +152,21 @@ Boot_male_EVR   <- list()
 Boot_male_K     <- list()
 
 max_h   <- 17
-no_core <- detectCores() - 2
+no_core <- max(1, detectCores() - 2)
+
+# Register parallel backend once before the loop
+if (.Platform$OS.type == "unix") {
+  registerDoMC(no_core)
+} else {
+  cl <- makeCluster(no_core)
+  registerDoParallel(cl)
+}
 
 for (i in 1:n_states) {
   pref           <- (n_year * i - (n_year - 1)):(n_year * i)
   n_training_ini <- length(pref) - max_h
   fixed_com1     <- Fixed_part_means[pref, ]
   Residuals_f1   <- Residuals_mean[pref, ]
-  
-  registerDoMC(no_core)
   
   boot_EVR <- foreach(iwk = 1:max_h) %dopar% Pref_forecast_curves(
     fixed_com = fixed_com1[1:(n_training_ini - 1 + iwk), ],
@@ -226,6 +233,11 @@ for (i in 1:n_states) {
   Boot_female_K[[i]]   <- Forecast_female_transformed_K
   Boot_male_EVR[[i]]   <- Forecast_male_transformed_EVR
   Boot_male_K[[i]]     <- Forecast_male_transformed_K
+}
+
+# Stop cluster if Windows cluster was created
+if (.Platform$OS.type != "unix") {
+  stopCluster(cl)
 }
 
 # Error Metrics Evaluation
@@ -366,4 +378,3 @@ for (name in names(fanova_list)) {
   file_name  <- paste0("FANOVA_", err_metric, "_", gender, "_", comp, ".rds")
   saveRDS(mat, file = file.path(dir_shiny, file_name))
 }
-

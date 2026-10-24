@@ -1,5 +1,6 @@
-# The rcode below produces Figure 5. Heatmaps for point forecast results.
-source("load_packages.R")
+# The R code below produces Figure 5. Heatmaps for point forecast results.
+
+source(here("load_packages.R"))
 
 dir.results <- here("results", "Results_Point")
 dir.plots   <- here("results", "Plots")
@@ -37,7 +38,7 @@ compute_min_counts <- function(method_list) {
                dimnames = list(NULL, paste0("H", 1:n_hor), names(method_list)))
   
   for (m in names(method_list)) {
-    # Transpose [17 x 47] matrix to fill [47 subnationals x 17 horizons]
+    # Transpose [17 x 47] matrix to fill [47 prefectures x 17 horizons]
     arr[, , m] <- t(method_list[[m]])
   }
   

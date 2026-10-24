@@ -8,11 +8,11 @@
 # ==============================================================================
 # Directory Setup & Source Dependencies
 # ==============================================================================
-source("load_packages.R")
+source(here("load_packages.R"))
 source(here("auxiliary_source", "auxiliary_interval.R"))
 
 # --- Define Output Directories ---
-dir.results <- paste0(here("results", "Results_Interval", "Conformal"), "/")
+dir.results <- paste0(here("results", "Results_Interval", "conformal"), "/")
 dir.shiny2  <- paste0(here("Shiny_App", "datasets_shiny_app", "IFE"), "/")
 
 # Create directories if they do not exist

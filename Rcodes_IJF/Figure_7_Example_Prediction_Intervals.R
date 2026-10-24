@@ -1,6 +1,6 @@
-# This Rcode produces the Figure 7 in the paper about an example of the prediction intervals computed.
+# This R code produces the Figure 7 in the paper, an example of the computed prediction intervals.
 # --------------------------------------------------------------------------------------------------------------
-source("load_packages.R")
+source(here("load_packages.R"))
 
 # Subdirectories
 dir.data    <- here("data", "updated_data/")

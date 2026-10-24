@@ -1,7 +1,7 @@
 ##################################################################
 # Determining the optimal tuning parameter via standard deviation
 ##################################################################
-source("load_packages.R")
+source(here("load_packages.R"))
 
 # Dynamic directory using project-relative paths
 dir_data <- here("data")

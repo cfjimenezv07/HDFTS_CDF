@@ -59,7 +59,7 @@ fore_national_cdf <- function(data_set, ncomp_method, fh, fmethod)
       forecast(
         ftsm(fts(ages[1:110], t(data_cumsum_logit)), order = ncomp),
         h = fh,
-        method = fmethod
+        method = fmethod, B = 399
       )
     )
     
