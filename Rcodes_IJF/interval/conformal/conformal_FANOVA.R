@@ -1,34 +1,33 @@
 #############################################################################################################
-# This script reproduces the interval forecast error results (Conformal) for Functional Analysis of Variance Method of Jimenez-Varon et al. (2024) (FANOVA)
-# reported in Table C.1 (Column 4) using the EVR criterion and in Table C.1 (Column 9)
+# This script reproduces the interval forecast error results (Conformal) for Functional Analysis of Variance Method of Jiménez-Varón, et al. (2024) (FANOVA)
+# reported in Table C1 (Column 4) using the EVR criterion and in Table C1 (Column 9)
 # using the K = 6 criterion.
 
 # At the end of this script, the saved results in dir.results correspond to:
-# - FANOVA_int_fore_subnational_err_F_EVR_conformal_mean & FANOVA_int_fore_subnational_err_M_EVR_conformal_mean -> Table C.1 (Column 4, FANOVA)
-# - FANOVA_int_fore_subnational_err_F_K6_conformal_mean.rds  & FANOVA_int_fore_subnational_err_M_K6_conformal_mean.rds  -> Table C.1 (Column 9, FANOVA)
+# - FANOVA_int_fore_subnational_err_F_EVR_conformal_mean.rds & FANOVA_int_fore_subnational_err_M_EVR_conformal_mean.rds -> Table C1 (Column 4, FANOVA)
+# - FANOVA_int_fore_subnational_err_F_K6_conformal_mean.rds  & FANOVA_int_fore_subnational_err_M_K6_conformal_mean.rds  -> Table C1 (Column 9, FANOVA)
 #############################################################################################################
 # ==============================================================================
 # Directory Setup & Source Dependencies
 # ==============================================================================
-source(here("load_packages.R"))
-source(here("auxiliary_source", "auxiliary_interval.R"))
-source(here("auxiliary_source", "CDF_transformation.R"))
-source(here("auxiliary_source", "forecast_Arima.R"))
+source(here::here("load_packages.R"))
+source(here::here("auxiliary_source", "auxiliary_interval.R"))
+source(here::here("auxiliary_source", "CDF_transformation.R"))
+source(here::here("auxiliary_source", "forecast_Arima.R"))
 
 # --- Define Directories ---
-dir.d      <- here("data", "updated_data/")
-dir.results <- paste0(here("results", "Results_Interval", "conformal"), "/")
-dir.shiny2  <- paste0(here("Shiny_App", "datasets_shiny_app", "IFE"), "/")
+dir.d       <- here::here("data")
+dir.results <- here::here("results", "Results_Interval", "conformal")
+dir.shiny2  <- here::here("Shiny_App", "datasets_shiny_app", "IFE")
 
 # Create directories if they do not exist
-if (!dir.exists(dir.results))      dir.create(dir.results, recursive = TRUE)
-if (!dir.exists(dir.shiny2)) dir.create(dir.shiny2, recursive = TRUE)
-
+if (!dir.exists(dir.results)) dir.create(dir.results, recursive = TRUE)
+if (!dir.exists(dir.shiny2))  dir.create(dir.shiny2, recursive = TRUE)
 
 # ==============================================================================
 # Data Loading and Preprocessing
 # ==============================================================================
-
+set.seed(12345)
 year         <- 1975:2023
 n_year       <- length(year)
 age          <- 0:110
@@ -48,49 +47,17 @@ state <- c("Hokkaido", "Aomori", "Iwate", "Miyagi", "Akita", "Yamagata", "Fukush
            "Tokushima", "Kagawa", "Ehime", "Kochi",
            "Fukuoka", "Saga", "Nagasaki", "Kumamoto", "Oita", "Miyazaki", "Kagoshima", "Okinawa")
 
-female_prefecture_qx <- male_prefecture_qx <- total_prefecture_qx <- list()
+# Load pre-processed dx data directly from rds
+female_prefecture_dx_raw <- readRDS(file.path(dir.d, "female_prefecture_dx.rds"))
+male_prefecture_dx_raw   <- readRDS(file.path(dir.d, "male_prefecture_dx.rds"))
 
-for (ik in seq_along(state)) {
-  female_data <- read.table(paste0(dir.d, "female_prefecture_", ik, ".txt"), header = TRUE, skip = 2)
-  female_data <- female_data[female_data$Year >= 1975, ]
-  female_prefecture_qx[[ik]] <- t(matrix(female_data$qx, n_age, n_year))
-  
-  male_data <- read.table(paste0(dir.d, "male_prefecture_", ik, ".txt"), header = TRUE, skip = 2)
-  male_data <- male_data[male_data$Year >= 1975, ]
-  male_prefecture_qx[[ik]] <- t(matrix(male_data$qx, n_age, n_year))
-  
-  total_data <- read.table(paste0(dir.d, "total_prefecture_", ik, ".txt"), header = TRUE, skip = 2)
-  total_data <- total_data[total_data$Year >= 1975, ]
-  total_prefecture_qx[[ik]] <- t(matrix(total_data$qx, n_age, n_year))
-}
-
-# Convert qx to dx death counts
-female_prefecture_dx <- male_prefecture_dx <- total_prefecture_dx <- list()
-
-for (iw in seq_along(state)) {
-  female_dum <- male_dum <- total_dum <- matrix(NA, n_year, n_age)
-  for (ij in 1:n_year) {
-    pop_F <- pop_M <- pop_T <- 10^5
-    for (ik in 1:n_age) {
-      female_dum[ij, ik] <- female_prefecture_qx[[iw]][ij, ik] * pop_F
-      pop_F              <- pop_F - female_dum[ij, ik]
-      
-      male_dum[ij, ik]   <- male_prefecture_qx[[iw]][ij, ik] * pop_M
-      pop_M              <- pop_M - male_dum[ij, ik]
-      
-      total_dum[ij, ik]  <- total_prefecture_qx[[iw]][ij, ik] * pop_T
-      pop_T              <- pop_T - total_dum[ij, ik]
-    }
-  }
-  female_prefecture_dx[[iw]] <- t(female_dum)
-  male_prefecture_dx[[iw]]   <- t(male_dum)
-  total_prefecture_dx[[iw]]  <- t(total_dum)
-}
+# Convert matrices from Year x Age to Age x Year for function compatibility
+female_prefecture_dx <- lapply(female_prefecture_dx_raw, t)
+male_prefecture_dx   <- lapply(male_prefecture_dx_raw, t)
 
 # ==============================================================================
 # Functional Mean ANOVA (FM-ANOVA) Transformation & Decomposition
 # ==============================================================================
-
 Transformed_female <- Transformed_male <- list()
 for (i in 1:n_prefectures) {
   Transformed_female[[i]] <- t(cdf_transformation(t(female_prefecture_dx[[i]]) / 10^5, year))
@@ -121,11 +88,9 @@ female_prefecture_res_means   <- lapply(1:length(part_list), function(k) Res2_me
 male_prefecture_fixed_means   <- lapply(1:length(part_list), function(k) Fixed_part_means_1[part_list[[k]], ])
 female_prefecture_fixed_means <- lapply(1:length(part_list), function(k) Fixed_part_means_2[part_list[[k]], ])
 
-
 # ==============================================================================
 # Forecasting Functions
 # ==============================================================================
-
 select_k <- function(tau, eigenvalue) {
   k_max <- length(eigenvalue)
   k_all <- rep(0, k_max - 1)
@@ -200,11 +165,9 @@ fore_FANOVA_cdf <- function(Fixed, Residuals, ncomp_method, fh, fmethod = "ets",
   return(data_cumsum_logit_fore_add_diff * 10^5)
 }
 
-
 # ==============================================================================
 # Main Split Conformal Prediction Function (FANOVA)
 # ==============================================================================
-
 interval_fore_FANOVA_cdf_conformal <- function(Fixed, Residuals, Holdout, method_ncomp, est_method, horizon, 
                                                fore_method = "CDF", uni_fore_method, level_sig) {
   fdata      <- t(Holdout)
@@ -266,11 +229,9 @@ interval_fore_FANOVA_cdf_conformal <- function(Fixed, Residuals, Holdout, method
   return(list(int_err = int_err, dimn = ncol(resi_mat)))
 }
 
-
 # ==============================================================================
 # Simulation Routine Wrapper
 # ==============================================================================
-
 run_fanova_conformal_experiment <- function(method_ncomp, level_sig) {
   err_F <- err_M <- array(NA, dim = c(16, 3, 47))
   
@@ -304,11 +265,9 @@ run_fanova_conformal_experiment <- function(method_ncomp, level_sig) {
   return(list(err_F = err_F, err_M = err_M, mean_F = mean_F, mean_M = mean_M))
 }
 
-
 # ==============================================================================
 # Execute Experiments
 # ==============================================================================
-
 # Level of significance = 0.80
 res_EVR_080 <- run_fanova_conformal_experiment(method_ncomp = "EVR",   level_sig = 0.80)
 res_K6_080  <- run_fanova_conformal_experiment(method_ncomp = "Fixed", level_sig = 0.80)
@@ -317,17 +276,13 @@ res_K6_080  <- run_fanova_conformal_experiment(method_ncomp = "Fixed", level_sig
 res_EVR_095 <- run_fanova_conformal_experiment(method_ncomp = "EVR",   level_sig = 0.95)
 res_K6_095  <- run_fanova_conformal_experiment(method_ncomp = "Fixed", level_sig = 0.95)
 
-
 # ==============================================================================
-# Save Outputs to dir.r (Prefixed with FANOVA_)
+# Save Outputs to dir.results (Prefixed with FANOVA_)
 # ==============================================================================
-
 save_fanova_results <- function(res, method_label, suffix) {
-  # Arrays
   saveRDS(res$err_F, file.path(dir.results, paste0("FANOVA_int_fore_subnational_err_F_", method_label, "_conformal", suffix, ".rds")))
   saveRDS(res$err_M, file.path(dir.results, paste0("FANOVA_int_fore_subnational_err_M_", method_label, "_conformal", suffix, ".rds")))
   
-  # Means
   saveRDS(res$mean_F, file.path(dir.results, paste0("FANOVA_int_fore_subnational_err_F_", method_label, "_conformal", suffix, "_mean.rds")))
   saveRDS(res$mean_M, file.path(dir.results, paste0("FANOVA_int_fore_subnational_err_M_", method_label, "_conformal", suffix, "_mean.rds")))
 }
@@ -340,11 +295,9 @@ save_fanova_results(res_K6_080,  "K6",  "")
 save_fanova_results(res_EVR_095, "EVR", "_alpha_0.95")
 save_fanova_results(res_K6_095,  "K6",  "_alpha_0.95")
 
-
 # ==============================================================================
 # Export to Shiny Directory (Prefixed with FANOVA_)
 # ==============================================================================
-
 arrays_list_shiny <- list(
   FANOVA_female_EVR_80 = res_EVR_080$err_F,
   FANOVA_male_EVR_80   = res_EVR_080$err_M,
@@ -361,4 +314,3 @@ for (name in names(arrays_list_shiny)) {
   file_name <- paste0(name, ".rds")
   saveRDS(arrays_list_shiny[[name]], file = file.path(dir.shiny2, file_name))
 }
-

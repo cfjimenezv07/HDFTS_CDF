@@ -3,13 +3,12 @@
 # Description: Processes Japanese subnational mortality data and saves dx matrices
 ###############################################################################
 # Load packages 
-source(here("load_packages.R"))
+source(here::here("load_packages.R"))
 
 # Dynamic Directories using project-relative paths
-dir_data     <- here("data")
-dir_data_raw <- here("data", "updated_data")
-dir_results  <- here("results")
-
+dir_data     <- here::here("data")
+dir_data_raw <- here::here("data", "updated_data")
+dir_results  <- here::here("results")
 
 # Ensure output directories exist
 dirs_to_create <- c(dir_data, dir_results) 
@@ -87,15 +86,16 @@ saveRDS(female_prefecture_dx, file = file.path(dir_data, "female_prefecture_dx.r
 saveRDS(male_prefecture_dx,   file = file.path(dir_data, "male_prefecture_dx.rds"))
 saveRDS(total_prefecture_dx,  file = file.path(dir_data, "total_prefecture_dx.rds"))
 
-# Compute national benchmark population distributions
+# Compute national benchmark death count distributions (unweighted prefecture mean)
 compute_matrix_mean <- function(mat_list) {
   Reduce("+", mat_list) / length(mat_list)
 }
 
-Japan_female_pop <- compute_matrix_mean(female_prefecture_dx)
-Japan_male_pop   <- compute_matrix_mean(male_prefecture_dx)
-Japan_total_pop  <- compute_matrix_mean(total_prefecture_dx)
+Japan_female_dx <- compute_matrix_mean(female_prefecture_dx)
+Japan_male_dx   <- compute_matrix_mean(male_prefecture_dx)
+Japan_total_dx  <- compute_matrix_mean(total_prefecture_dx)
 
-saveRDS(Japan_female_pop, file = file.path(dir_data, "Japan_female_pop.rds"))
-saveRDS(Japan_male_pop,   file = file.path(dir_data, "Japan_male_pop.rds"))
-saveRDS(Japan_total_pop,  file = file.path(dir_data, "Japan_total_pop.rds"))
+# Saved as dx objects to avoid misleading object names
+saveRDS(Japan_female_dx, file = file.path(dir_data, "Japan_female_dx.rds"))
+saveRDS(Japan_male_dx,   file = file.path(dir_data, "Japan_male_dx.rds"))
+saveRDS(Japan_total_dx,  file = file.path(dir_data, "Japan_total_dx.rds"))

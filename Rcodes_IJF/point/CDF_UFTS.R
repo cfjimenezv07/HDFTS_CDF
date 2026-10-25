@@ -1,11 +1,11 @@
 #############################################################################################################
 # This script reproduces the point forecast error results for univariate functional time series (UFTS)
-# reported in Table 1 (Columns 1 and 6) using the EVR criterion and in Table A.1 (Columns 1 and 5)
+# reported in Table 1 (Columns 1 and 6) using the EVR criterion and in Table A1 (Columns 1 and 5)
 # using the K = 6 criterion.
 
 # At the end of this script, the saved results in dir_results correspond to:
 # - horizon_point_fore_subnational_err_F_EVR_ETS_mean.rds & horizon_point_fore_subnational_err_M_EVR_ETS_mean.rds -> Table 1 (Columns 1 & 6, UFTS)
-# - horizon_point_fore_subnational_err_F_K6_ETS_mean.rds  & horizon_point_fore_subnational_err_M_K6_ETS_mean.rds  -> Table A.1 (Columns 1 & 5, UFTS)
+# - horizon_point_fore_subnational_err_F_K6_ETS_mean.rds  & horizon_point_fore_subnational_err_M_K6_ETS_mean.rds  -> Table A1 (Columns 1 & 5, UFTS)
 #############################################################################################################
 
 # Load required setup and functions

@@ -1,19 +1,19 @@
-# This R code produces the Figure 7 in the paper, an example of the computed prediction intervals.
 # --------------------------------------------------------------------------------------------------------------
-source(here("load_packages.R"))
+# This R code produces Figure 7 in the paper, an example of the computed prediction intervals.
+# --------------------------------------------------------------------------------------------------------------
+source(here::here("load_packages.R"))
 
 # Subdirectories
-dir.data    <- here("data", "updated_data/")
-dir.aux     <- here("auxiliary_source")
-dir.results <- here("results", "Results_Interval")
-dir.plots   <- here("results", "Plots")
+dir.data    <- here::here("data")
+dir.aux     <- here::here("auxiliary_source")
+dir.results <- here::here("results", "Results_Interval")
+dir.plots   <- here::here("results", "Plots")
 
 # Create output directories if they do not exist
 if(!dir.exists(dir.plots)) dir.create(dir.plots, recursive = TRUE)
 if(!dir.exists(dir.results)) dir.create(dir.results, recursive = TRUE)
 
 # Load external dependencies
-source(file.path("load_packages.R"))
 source(file.path(dir.aux, "auxiliary_interval.R"))
 source(file.path(dir.aux, "CDF_transformation.R"))
 
@@ -39,35 +39,13 @@ state <- c("Hokkaido", "Aomori", "Iwate", "Miyagi", "Akita", "Yamagata", "Fukush
 part_list   <- lapply(1:n_prefectures, function(ik) (n_year*ik-(n_year-1)):(n_year*ik))
 part_list_c <- lapply(1:n_populations, function(ik) (n_age*ik-(n_age-1)):(n_age*ik))
 
-female_prefecture_qx <- male_prefecture_qx <- total_prefecture_qx <- list()
-for (ik in seq_along(state)) {
-  female_data <- read.table(paste0(dir.data, "female_prefecture_", ik, ".txt"), header = TRUE, skip = 2)
-  male_data   <- read.table(paste0(dir.data, "male_prefecture_", ik, ".txt"), header = TRUE, skip = 2)
-  total_data  <- read.table(paste0(dir.data, "total_prefecture_", ik, ".txt"), header = TRUE, skip = 2)
-  
-  female_prefecture_qx[[ik]] <- t(matrix(female_data[female_data$Year >= 1975, ]$qx, n_age, n_year))
-  male_prefecture_qx[[ik]]   <- t(matrix(male_data[male_data$Year >= 1975, ]$qx, n_age, n_year))
-  total_prefecture_qx[[ik]]  <- t(matrix(total_data[total_data$Year >= 1975, ]$qx, n_age, n_year))
-}
+# Load pre-processed dx data directly from rds
+female_prefecture_dx_raw <- readRDS(file.path(dir.data, "female_prefecture_dx.rds"))
+male_prefecture_dx_raw   <- readRDS(file.path(dir.data, "male_prefecture_dx.rds"))
 
-female_prefecture_dx <- male_prefecture_dx <- total_prefecture_dx <- list()
-for(iw in 1:length(state)) {
-  f_dum = m_dum = t_dum = matrix(NA, n_year, n_age)
-  for(ij in 1:n_year) {
-    s_f = s_m = s_t = 10^5
-    for(ik in 1:n_age) {
-      f_dum[ij,ik] = female_prefecture_qx[[iw]][ij,ik] * s_f
-      s_f = s_f - f_dum[ij,ik]
-      m_dum[ij,ik] = male_prefecture_qx[[iw]][ij,ik] * s_m
-      s_m = s_m - m_dum[ij,ik]
-      t_dum[ij,ik] = total_prefecture_qx[[iw]][ij,ik] * s_t
-      s_t = s_t - t_dum[ij,ik]
-    }
-  }
-  female_prefecture_dx[[iw]] = t(f_dum)
-  male_prefecture_dx[[iw]]   = t(m_dum)
-  total_prefecture_dx[[iw]]  = t(t_dum)
-}
+# Convert matrices from Year x Age to Age x Year for function compatibility
+female_prefecture_dx <- lapply(female_prefecture_dx_raw, t)
+male_prefecture_dx   <- lapply(male_prefecture_dx_raw, t)
 
 # 3. HELPER FUNCTIONS & SHARED PLOTTING THEME
 # ------------------------------------------------------------------------------
@@ -109,9 +87,7 @@ plot_and_save <- function(df_h, filename) {
 
 # 4. METHOD 1: UFTS
 # ------------------------------------------------------------------------------
-# Pass fdata as (Years x Ages) inside functions
 get_multi_horizon_data_UFTS <- function(fdata_mat, horizons, method_ncomp, fore_method, uni_fore_method, level_sig, type_PI) {
-  # Transpose input matrix if needed so rows are years and columns are ages
   if(nrow(fdata_mat) == 111) fdata <- t(fdata_mat) else fdata <- fdata_mat
   
   all_horizons_df <- data.frame()
@@ -326,4 +302,3 @@ for(h in 1:3) {
   
   plot_and_save(df_p, paste0("FANOVA_h", h, ".pdf"))
 }
-

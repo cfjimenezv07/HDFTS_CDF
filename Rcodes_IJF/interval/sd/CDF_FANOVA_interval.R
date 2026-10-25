@@ -1,21 +1,21 @@
 #############################################################################################################
-# This script reproduces the interval forecast error results (sd) for Functional Analysis of Variance Method of Jimenez-Varon et al. (2024) (FANOVA)
-# reported in Table 3 (Columns 4 and 9) using the EVR criterion and in Table B.1 (Columns 4 and 8)
+# This script reproduces the interval forecast error results (sd) for Functional Analysis of Variance Method of Jiménez-Varón, et al. (2024) (FANOVA)
+# reported in Table 3 (Columns 4 and 9) using the EVR criterion and in Table B1 (Columns 4 and 8)
 # using the K = 6 criterion.
 
 # At the end of this script, the saved results in dir.results correspond to:
-# - FANOVA_int_fore_subnational_err_F_EVR_ETS_mean & FANOVA_int_fore_subnational_err_M_EVR_ETS_mean -> Table 3 (Columns 3 & 8, FANOVA)
-# - FANOVA_int_fore_subnational_err_F_ETS_K6_mean.rds  & FANOVA_int_fore_subnational_err_M_ETS_K6_mean.rds  -> Table B.1 (Columns 3 & 7, FANOVA)
+# - FANOVA_int_fore_subnational_err_F_EVR_ETS_mean.rds & FANOVA_int_fore_subnational_err_M_EVR_ETS_mean.rds -> Table 3 (Columns 4 & 9, FANOVA)
+# - FANOVA_int_fore_subnational_err_F_ETS_K6_mean.rds  & FANOVA_int_fore_subnational_err_M_ETS_K6_mean.rds  -> Table B1 (Columns 4 & 8, FANOVA)
 #############################################################################################################
 # ==============================================================================
 # 0. LIBRARIES & DIRECTORIES
 # ==============================================================================
-source(here("load_packages.R"))
+source(here::here("load_packages.R"))
 
-dir_source  <- here("auxiliary_source")
-dir.results <- paste0(here("results", "Results_Interval", "sd"), "/")
-dir.shiny2  <- paste0(here("Shiny_App", "datasets_shiny_app", "IFE"), "/")
-dir.d       <- here("data", "updated_data/")
+dir_source  <- here::here("auxiliary_source")
+dir.results <- here::here("results", "Results_Interval", "sd")
+dir.shiny2  <- here::here("Shiny_App", "datasets_shiny_app", "IFE")
+dir.d       <- here::here("data")
 
 if (!dir.exists(dir.results)) dir.create(dir.results, recursive = TRUE)
 if (!dir.exists(dir.shiny2))  dir.create(dir.shiny2, recursive = TRUE)
@@ -23,6 +23,7 @@ if (!dir.exists(dir.shiny2))  dir.create(dir.shiny2, recursive = TRUE)
 # ==============================================================================
 # 1. DATASET SETUP & LOADING
 # ==============================================================================
+set.seed(12345)
 year <- 1975:2023
 n_year <- length(year)
 age <- 0:110
@@ -50,45 +51,14 @@ state <- c("Hokkaido", "Aomori", "Iwate", "Miyagi", "Akita", "Yamagata", "Fukush
            "Tokushima", "Kagawa", "Ehime", "Kochi",
            "Fukuoka", "Saga", "Nagasaki", "Kumamoto", "Oita", "Miyazaki", "Kagoshima", "Okinawa")
 
-female_prefecture_qx <- male_prefecture_qx <- total_prefecture_qx <- list()
+# Load pre-processed dx data directly from rds
+female_prefecture_dx_raw <- readRDS(file.path(dir.d, "female_prefecture_dx.rds"))
+male_prefecture_dx_raw   <- readRDS(file.path(dir.d, "male_prefecture_dx.rds"))
 
-for (ik in seq_along(state)) {
-  female_data <- read.table(paste0(dir.d, "female_prefecture_", ik, ".txt"), header = TRUE, skip = 2)
-  female_data <- female_data[female_data$Year >= 1975, ]
-  female_prefecture_qx[[ik]] <- t(matrix(female_data$qx, n_age, n_year))
-  
-  male_data <- read.table(paste0(dir.d, "male_prefecture_", ik, ".txt"), header = TRUE, skip = 2)
-  male_data <- male_data[male_data$Year >= 1975, ]
-  male_prefecture_qx[[ik]] <- t(matrix(male_data$qx, n_age, n_year))
-  
-  total_data <- read.table(paste0(dir.d, "total_prefecture_", ik, ".txt"), header = TRUE, skip = 2)
-  total_data <- total_data[total_data$Year >= 1975, ]
-  total_prefecture_qx[[ik]] <- t(matrix(total_data$qx, n_age, n_year))
-}
+# Convert matrices from Year x Age to Age x Year for function compatibility
+female_prefecture_dx <- lapply(female_prefecture_dx_raw, t)
+male_prefecture_dx   <- lapply(male_prefecture_dx_raw, t)
 
-female_prefecture_dx <- male_prefecture_dx <- total_prefecture_dx <- list()
-for (iw in 1:length(state)) {
-  female_prefecture_dum <- male_prefecture_dum <- total_prefecture_dum <- matrix(NA, n_year, n_age)
-  for (ij in 1:n_year) {
-    start_pop_female <- start_pop_male <- start_pop_total <- 10^5
-    for (ik in 1:n_age) {
-      female_prefecture_dum[ij, ik] <- (female_prefecture_qx[[iw]])[ij, ik] * start_pop_female
-      start_pop_female <- start_pop_female - female_prefecture_dum[ij, ik]
-      
-      male_prefecture_dum[ij, ik] <- (male_prefecture_qx[[iw]])[ij, ik] * start_pop_male
-      start_pop_male <- start_pop_male - male_prefecture_dum[ij, ik]
-      
-      total_prefecture_dum[ij, ik] <- (total_prefecture_qx[[iw]])[ij, ik] * start_pop_total
-      start_pop_total <- start_pop_total - total_prefecture_dum[ij, ik]
-    }
-  }
-  female_prefecture_dx[[iw]] <- t(female_prefecture_dum)
-  male_prefecture_dx[[iw]]   <- t(male_prefecture_dum)
-  total_prefecture_dx[[iw]]  <- t(total_prefecture_dum)
-}
-
-All_Japan_female_qx <- female_prefecture_dx
-All_Japan_male_qx   <- male_prefecture_dx
 n_states <- length(state)
 
 # ==============================================================================
@@ -99,8 +69,8 @@ source(file.path(dir_source, "CDF_transformation.R"))
 Transformed_female <- list()
 Transformed_male <- list()
 for (i in 1:n_states) {
-  Transformed_female[[i]] <- t(cdf_transformation(t(All_Japan_female_qx[[i]]) / 10^5, year))
-  Transformed_male[[i]]   <- t(cdf_transformation(t(All_Japan_male_qx[[i]]) / 10^5, year))
+  Transformed_female[[i]] <- t(cdf_transformation(t(female_prefecture_dx[[i]]) / 10^5, year))
+  Transformed_male[[i]]   <- t(cdf_transformation(t(male_prefecture_dx[[i]]) / 10^5, year))
 }
 
 all_unconstrained_female <- t(list.cbind(Transformed_female))
@@ -453,4 +423,3 @@ for (name in names(arrays_list)) {
   file_name <- paste0("FANOVA_", gender, "_", comp, "_", level, ".rds")
   saveRDS(arr, file = file.path(dir.shiny2, file_name))
 }
-

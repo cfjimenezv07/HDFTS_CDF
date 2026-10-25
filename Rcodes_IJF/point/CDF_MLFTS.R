@@ -1,11 +1,11 @@
 #############################################################################################################
 # This script reproduces the point forecast error results for Multilevel functional time series (MLFTS)
-# reported in Table 1 (Columns 3 and 8) using the EVR criterion and in Table A.1 (Columns 3 and 7)
+# reported in Table 1 (Columns 3 and 8) using the EVR criterion and in Table A1 (Columns 3 and 7)
 # using the K = 6 criterion.
 
 # At the end of this script, the saved results in dir_results correspond to:
 # - horizon_point_fore_subnational_err_MLFTS_F_EVR_ETS_mean.rds & horizon_point_fore_subnational_err_MLFTS_M_EVR_ETS_mean.rds -> Table 1 (Columns 3 & 8, MLFTS)
-# - horizon_point_fore_subnational_err_MLFTS_F_K6_ETS_mean.rds  & horizon_point_fore_subnational_err_MLFTS_M_K6_ETS_mean.rds  -> Table A.1 (Columns 3 & 7, MLFTS)
+# - horizon_point_fore_subnational_err_MLFTS_F_K6_ETS_mean.rds  & horizon_point_fore_subnational_err_MLFTS_M_K6_ETS_mean.rds  -> Table A1 (Columns 3 & 7, MLFTS)
 #############################################################################################################
 
 # Load required setup and functions
@@ -46,12 +46,6 @@ ages      <- 0:110
 
 # Initialize output containers
 point_fore_subnational_err_MLFTS_F_EVR_ETS <- array(NA, dim = c(n_state, horizons, n_metrics))
-#############################################################################################################
-# This script reproduces the point forecast error results for Multivariate functional time series (MFTS)
-# reported in Table 1 (Columns 2 and 7) using the EVR criterion and in Table A.1 (Columns 2 and 6)
-# using the K = 6 criterion.
-#############################################################################################################
-
 point_fore_subnational_err_MLFTS_M_EVR_ETS <- array(NA, dim = c(n_state, horizons, n_metrics))
 point_fore_subnational_err_MLFTS_F_K6_ETS  <- array(NA, dim = c(n_state, horizons, n_metrics))
 point_fore_subnational_err_MLFTS_M_K6_ETS  <- array(NA, dim = c(n_state, horizons, n_metrics))

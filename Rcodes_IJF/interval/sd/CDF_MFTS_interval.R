@@ -3,12 +3,12 @@
 ###############################################################################
 #############################################################################################################
 # This script reproduces the interval forecast error results (sd) for Multivariate functional time series (MFTS)
-# reported in Table 3 (Columns 2 and 7) using the EVR criterion and in Table B.1 (Columns 2 and 6)
+# reported in Table 3 (Columns 2 and 7) using the EVR criterion and in Table B1 (Columns 2 and 6)
 # using the K = 6 criterion.
 
 # At the end of this script, the saved results in dir.results correspond to:
 # - MFTS_int_fore_subnational_err_F_EVR_ETS_mean.rds & MFTS_int_fore_subnational_err_M_EVR_ETS_mean.rds -> Table 3 (Columns 2 & 7, MFTS)
-# - MFTS_int_fore_subnational_err_F_K6_ETS_mean.rds  & MFTS_int_fore_subnational_err_M_K6_ETS_mean.rds  -> Table B.1 (Columns 2 & 6, MFTS)
+# - MFTS_int_fore_subnational_err_F_K6_ETS_mean.rds  & MFTS_int_fore_subnational_err_M_K6_ETS_mean.rds  -> Table B1 (Columns 2 & 6, MFTS)
 #############################################################################################################
 # --- Source Auxiliary Functions ---
 source(here("load_packages.R"))

@@ -4,7 +4,7 @@
 #               Table 1 in the LaTeX format used in the paper, while
 #               simultaneously exporting a clean .tex file.
 ###############################################################################
-source("load_packages.R")
+source(here("load_packages.R"))
 
 # Dynamic directory path for Point Forecast results
 dir_results <- here("results", "Results_Point")

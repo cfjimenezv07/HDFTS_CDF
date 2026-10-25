@@ -1,9 +1,9 @@
 #############################################################################################################
-# This script reproduces the interval forecast error results (Conformal) for High dimensional functional PCA (HDFPCA)
-# reported in Table C.1 (Column 5) using the EVR criterion.
+# This script reproduces the interval forecast error results (Conformal) for High-dimensional functional PCA (HDFPCA)
+# reported in Table C1 (Column 5) using the EVR criterion.
 
 # At the end of this script, the saved results in dir.results correspond to:
-# - hdfpca_int_fore_subnational_err_F_EVR_conformal_mean.rds & hdfpca_int_fore_subnational_err_M_EVR_conformal_mean.rds -> Table C.1 (Column 5, HDFPCA)
+# - hdfpca_int_fore_subnational_err_F_EVR_conformal_mean.rds & hdfpca_int_fore_subnational_err_M_EVR_conformal_mean.rds -> Table C1 (Column 5, HDFPCA)
 #############################################################################################################
 # ==============================================================================
 # Directory Setup & Source Dependencies

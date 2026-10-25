@@ -1,11 +1,11 @@
 #############################################################################################################
 # This script reproduces the interval forecast error results (sd) for Multilevel functional time series (MLFTS)
-# reported in Table 3 (Columns 3 and 8) using the EVR criterion and in Table B.1 (Columns 3 and 7)
+# reported in Table 3 (Columns 3 and 8) using the EVR criterion and in Table B1 (Columns 3 and 7)
 # using the K = 6 criterion.
 
 # At the end of this script, the saved results in dir.results correspond to:
 # - MLFTS_int_fore_subnational_err_F_EVR_ETS_mean.rds & MLFTS_int_fore_subnational_err_M_EVR_ETS_mean.rds -> Table 3 (Columns 3 & 8, MLFTS)
-# - MLFTS_int_fore_subnational_err_F_K6_ETS_mean.rds  & MLFTS_int_fore_subnational_err_M_K6_ETS_mean.rds  -> Table B.1 (Columns 3 & 7, MLFTS)
+# - MLFTS_int_fore_subnational_err_F_K6_ETS_mean.rds  & MLFTS_int_fore_subnational_err_M_K6_ETS_mean.rds  -> Table B1 (Columns 3 & 7, MLFTS)
 #############################################################################################################
 
 # ==============================================================================

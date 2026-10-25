@@ -1,6 +1,6 @@
 ###############################################################################
 # Script: TableB1_IntervalAnalysis_K6.R
-# Description: Reads saved intervsal forecast error (K6) .rds files and prints
+# Description: Reads saved interval forecast error (K6) .rds files and prints
 #               Table B1 in the LaTeX format used in the paper.
 ###############################################################################
 source(here("load_packages.R"))

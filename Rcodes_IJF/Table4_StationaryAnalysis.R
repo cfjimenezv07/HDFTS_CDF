@@ -3,13 +3,13 @@
 # Description: Stationary analysis of the FTS
 #              Produces Table 4 
 ###############################################################################
-source(here("load_packages.R"))
+source(here::here("load_packages.R"))
 
 # Dynamic Directories
-dir.d       <- here("data", "updated_data/")
-dir.results <- here("results")
-dir.p       <- here("results", "Plots")
-dir.aux     <- here("auxiliary_source")
+dir.d       <- here::here("data")
+dir.results <- here::here("results")
+dir.p       <- here::here("results", "Plots")
+dir.aux     <- here::here("auxiliary_source")
 
 # Ensure output directories exist
 if (!dir.exists(dir.results)) dir.create(dir.results, recursive = TRUE)
@@ -30,57 +30,14 @@ part_list <- lapply(1:n_prefectures, function(ik) {
   (n_year * ik - (n_year - 1)):(n_year * ik)
 })
 
-state <- c("Hokkaido", "Aomori", "Iwate", "Miyagi", "Akita", "Yamagata", "Fukushima",
-           "Ibaraki", "Tochigi", "Gunma", "Saitama", "Chiba", "Tokyo", "Kanagawa", 
-           "Niigata", "Toyama", "Ishikawa", "Fukui", "Yamanashi", "Nagano", "Gifu", "Shizuoka", "Aichi",
-           "Mie", "Shiga", "Kyoto", "Osaka", "Hyogo", "Nara", "Wakayama", 
-           "Tottori", "Shimane", "Okayama", "Hiroshima", "Yamaguchi", 
-           "Tokushima", "Kagawa", "Ehime", "Kochi",
-           "Fukuoka", "Saga", "Nagasaki", "Kumamoto", "Oita", "Miyazaki", "Kagoshima", "Okinawa")
-
-# 3. READ SUBNATIONAL MORTALITY DATA & CALCULATE DX
+# 3. READ SUBNATIONAL MORTALITY DX DATA FROM PRE-PROCESSED RDS
 # ------------------------------------------------------------------------------
-female_prefecture_qx <- male_prefecture_qx <- total_prefecture_qx <- list()
+female_prefecture_dx <- readRDS(file.path(dir.d, "female_prefecture_dx.rds"))
+male_prefecture_dx   <- readRDS(file.path(dir.d, "male_prefecture_dx.rds"))
 
-for (ik in seq_along(state)) {
-  # Female
-  f_data <- read.table(file.path(dir.d, paste0("female_prefecture_", ik, ".txt")), header = TRUE, skip = 2)
-  female_prefecture_qx[[ik]] <- t(matrix(f_data[f_data$Year >= 1975, ]$qx, n_age, n_year))
-  
-  # Male
-  m_data <- read.table(file.path(dir.d, paste0("male_prefecture_", ik, ".txt")), header = TRUE, skip = 2)
-  male_prefecture_qx[[ik]] <- t(matrix(m_data[m_data$Year >= 1975, ]$qx, n_age, n_year))
-  
-  # Total
-  t_data <- read.table(file.path(dir.d, paste0("total_prefecture_", ik, ".txt")), header = TRUE, skip = 2)
-  total_prefecture_qx[[ik]] <- t(matrix(t_data[t_data$Year >= 1975, ]$qx, n_age, n_year))
-}
-
-# Construct Dx matrices
-female_prefecture_dx <- male_prefecture_dx <- total_prefecture_dx <- list()
-
-for (iw in seq_along(state)) {
-  f_dum <- m_dum <- t_dum <- matrix(NA, n_year, n_age)
-  for (ij in 1:n_year) {
-    pop_f <- pop_m <- pop_t <- 10^5
-    for (ik in 1:n_age) {
-      f_dum[ij, ik] <- female_prefecture_qx[[iw]][ij, ik] * pop_f
-      pop_f <- pop_f - f_dum[ij, ik]
-      
-      m_dum[ij, ik] <- male_prefecture_qx[[iw]][ij, ik] * pop_m
-      pop_m <- pop_m - m_dum[ij, ik]
-      
-      t_dum[ij, ik] <- total_prefecture_qx[[iw]][ij, ik] * pop_t
-      pop_t <- pop_t - t_dum[ij, ik]
-    }
-  }
-  female_prefecture_dx[[iw]] <- t(f_dum)
-  male_prefecture_dx[[iw]]   <- t(m_dum)
-  total_prefecture_dx[[iw]]  <- t(t_dum)
-}
-
-All_Japan_female_qx <- (female_prefecture_dx)
-All_Japan_male_qx   <- (male_prefecture_dx)
+# Convert matrices from Year x Age to Age x Year for downstream CDF functions
+prefecture_female_dx_t <- lapply(female_prefecture_dx, t)
+prefecture_male_dx_t   <- lapply(male_prefecture_dx, t)
 
 # 4. CDF TRANSFORMATION
 # ------------------------------------------------------------------------------
@@ -90,8 +47,8 @@ Transformed_female <- list()
 Transformed_male   <- list()
 
 for (i in 1:n_prefectures) {
-  Transformed_female[[i]] <- t(cdf_transformation(t(All_Japan_female_qx[[i]]) / 10^5, year))
-  Transformed_male[[i]]   <- t(cdf_transformation(t(All_Japan_male_qx[[i]]) / 10^5, year))
+  Transformed_female[[i]] <- t(cdf_transformation(t(prefecture_female_dx_t[[i]]) / 10^5, year))
+  Transformed_male[[i]]   <- t(cdf_transformation(t(prefecture_male_dx_t[[i]]) / 10^5, year))
 }
 
 all_unconstrained_female <- t(list.cbind(Transformed_female))
@@ -117,8 +74,6 @@ Res2_means <- Residuals_means$residuals2_mean
 # Split residuals per prefecture and transpose (110 grid points x 49 time points)
 male_res   <- lapply(part_list, function(k) t(Res1_means[k, ]))
 female_res <- lapply(part_list, function(k) t(Res2_means[k, ]))
-
-
 
 # --- 6. Functional Stationarity Tests (ftsa) ---
 center_columns <- function(mat) {
@@ -149,18 +104,16 @@ male_stat_pvals   <- run_prefecture_stationarity(male_res)
 female_stat_pvals <- run_prefecture_stationarity(female_res)
 
 stat_summary_table <- data.frame(
-  Group   = c("Male", "Female"),
-  Min     = c(min(male_stat_pvals), min(female_stat_pvals)),
+  Group     = c("Male", "Female"),
+  Min       = c(min(male_stat_pvals), min(female_stat_pvals)),
   `1st Qu.` = c(quantile(male_stat_pvals, 0.25), quantile(female_stat_pvals, 0.25)),
-  Median  = c(median(male_stat_pvals), median(female_stat_pvals)),
-  Mean    = c(mean(male_stat_pvals), mean(female_stat_pvals)),
+  Median    = c(median(male_stat_pvals), median(female_stat_pvals)),
+  Mean      = c(mean(male_stat_pvals), mean(female_stat_pvals)),
   `3rd Qu.` = c(quantile(male_stat_pvals, 0.75), quantile(female_stat_pvals, 0.75)),
-  Max     = c(max(male_stat_pvals), max(female_stat_pvals))
+  Max       = c(max(male_stat_pvals), max(female_stat_pvals))
 )
 
 print(stat_summary_table)
-
-
 
 # --- C. Heteroscedasticity Tests & Plots (FTSgof) ---
 get_fCH_pval <- function(mat, H = 10) {
@@ -177,3 +130,74 @@ df_fCH <- data.frame(
 )
 
 print(df_fCH)
+
+# --- 7. BUILD LaTeX TABLE 4 DIRECTLY FROM THE P-VALUES -----------------------
+
+summ_p <- function(p) {
+  c(Min  = min(p),
+    Q1   = unname(quantile(p, 0.25)),
+    Med  = median(p),
+    Mean = mean(p),
+    Q3   = unname(quantile(p, 0.75)),
+    Max  = max(p))
+}
+
+fmt_fixed <- function(x) sprintf("%.4f", x)
+fmt_sci   <- function(x, floor_val = 2.2e-16) {
+  sapply(x, function(v) {
+    if (v < floor_val) sprintf("$<%.1f\\times 10^{-16}$", floor_val * 1e16)
+    else if (v < 1e-3 | v >= 1e3) sprintf("%.2e", v)
+    else sprintf("%.4f", v)
+  })
+}
+
+make_row <- function(label, stats, fmt) {
+  paste0(label, " & ", paste(fmt(stats), collapse = " & "), " \\\\")
+}
+
+st_F <- summ_p(female_stat_pvals)
+st_M <- summ_p(male_stat_pvals)
+ch_F <- summ_p(female_fCH_pvals)
+ch_M <- summ_p(male_fCH_pvals)
+
+n_ch_F <- sum(female_fCH_pvals < 0.05)
+n_ch_M <- sum(male_fCH_pvals   < 0.05)
+n_st_F <- sum(female_stat_pvals < 0.05)
+n_st_M <- sum(male_stat_pvals   < 0.05)
+
+caption_txt <- paste0(
+  "\\caption{\\small Summary of $p$-values from stationarity and conditional ",
+  "heteroskedasticity tests across 47 prefectures (with seed set to 12345). ",
+  "The stationarity null is rejected at the 5\\% level in ", n_st_F, "/47 female and ",
+  n_st_M, "/47 male prefectures. The conditional homoskedasticity null is rejected ",
+  "in ", n_ch_F, "/47 female and ", n_ch_M, "/47 male prefectures.}"
+)
+
+tab_lines <- c(
+  "\\begin{table}[!htb]",
+  "\\centering",
+  "\\tabcolsep 0.24in",
+  caption_txt,
+  "\\begin{tabular}{@{}lrrrrrr@{}}",
+  "\\toprule",
+  "Gender & Min & 1st Qu. & Median & Mean & 3rd Qu. & Max \\\\",
+  "\\midrule",
+  "\\multicolumn{7}{l}{\\hspace{-.23in}{\\underline{Stationarity test}}} \\\\",
+  make_row("Female", st_F, fmt_fixed),
+  make_row("Male  ", st_M, fmt_fixed),
+  "\\\\",
+  "\\multicolumn{7}{l}{\\hspace{-.23in}{\\underline{Conditional heteroskedasticity test}}} \\\\",
+  make_row("Female", ch_F, fmt_sci),
+  make_row("Male  ", ch_M, fmt_sci),
+  "\\bottomrule",
+  "\\end{tabular}",
+  "\\label{tab:stationarity}",
+  "\\end{table}"
+)
+
+cat(tab_lines, sep = "\n")
+writeLines(tab_lines, file.path(dir.results, "Table4_StationaryAnalysis.tex"))
+
+saveRDS(list(male_stat = male_stat_pvals, female_stat = female_stat_pvals,
+             male_fCH  = male_fCH_pvals,  female_fCH  = female_fCH_pvals),
+        file.path(dir.results, "Table4_pvalues.rds"))

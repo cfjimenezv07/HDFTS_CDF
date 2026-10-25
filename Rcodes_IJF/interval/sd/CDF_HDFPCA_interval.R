@@ -1,6 +1,6 @@
 #############################################################################################################
-# This script reproduces the interval forecast error results (sd) for High dimensional functional PCA (HDFPCA)
-# reported in Table 1 (Columns 5 and 10) using the EVR criterion.
+# This script reproduces the interval forecast error results (sd) for High-dimensional functional PCA (HDFPCA)
+# reported in Table 3 (Columns 5 and 10) using the EVR criterion.
 
 # At the end of this script, the saved results in dir.results correspond to:
 # - horizon_specific_hdfpca_int_fore_subnational_err_F_EVR_ETS_CDF.rds & horizon_specific_hdfpca_int_fore_subnational_err_M_EVR_ETS_CDF.rds -> Table 3 (Columns 5 & 10, HDFPCA)

@@ -10,6 +10,7 @@ dir.p <- here("results", "Plots")
 # Ensure output directory exists
 if (!dir.exists(dir.p)) dir.create(dir.p, recursive = TRUE)
 set.seed(12345)
+
 # Model & Horizon Parameters
 n_methods  <- 9
 n_horizons <- 17
@@ -24,7 +25,6 @@ statistic <- "Tmax"
 
 # 2. HELPER FUNCTIONS & ARRAY INITIALIZATION
 # ------------------------------------------------------------------------------
-# Helper function to safely read and transpose RDS matrix objects
 load_t <- function(file_name, idx = 1) {
   full_path <- file.path(dir.r, file_name)
   if (!file.exists(full_path)) {
@@ -57,7 +57,7 @@ KLD_F[,,5] <- load_t("point_fore_subnational_err_HDFPCA_F_CDF.rds")
 KLD_F[,,6] <- load_t("point_fore_subnational_err_F_K6_ETS.rds")
 KLD_F[,,7] <- load_t("point_fore_subnational_err_MFTS_F_K6_ETS.rds")
 KLD_F[,,8] <- load_t("point_fore_subnational_err_MLFTS_F_K6_ETS.rds")
-KLD_F[,,9] <- load_t1("FANOVA_errors_KLD_female_K.rds")  
+KLD_F[,,9] <- load_t1("FANOVA_errors_KLD_female_K.rds") 
 
 # --- Populate Male Array ---
 KLD_M[,,1] <- load_t("point_fore_subnational_err_M_EVR_ETS.rds")
@@ -82,20 +82,18 @@ compute_MCS_survival <- function(loss_array) {
     colnames(Loss) <- method_names
     
     res <- MCSprocedure(Loss, alpha = alpha, B = B, statistic = statistic, verbose = FALSE)
-
-      surv <- rownames(res@show)[rownames(res@show) %in% res@Info$included]
-      surv_mat[h, surv] <- 47 
-   
+    
+    surv <- rownames(res@show)[rownames(res@show) %in% res@Info$included]
+    surv_mat[h, surv] <- 47 
   }
-  
   return(surv_mat)
 }
 
-# Compute MCS survival counts
 counts_female <- compute_MCS_survival(KLD_F)
 counts_male   <- compute_MCS_survival(KLD_M)
+
 # ==============================================================================
-# 4. PLOTTING FUNCTION 
+# 4. PLOTTING FUNCTION (Cleaned title to avoid duplicate headers)
 # ==============================================================================
 plot_MCS_final <- function(counts_mat, title_label = "") {
   
@@ -131,12 +129,11 @@ plot_MCS_final <- function(counts_mat, title_label = "") {
   return(p)
 }
 
-
 # ==============================================================================
-# 5. GENERATE AND SAVE FIGURES
+# 5. GENERATE AND SAVE FIGURES WITHOUT IN-PANEL TITLES
 # ==============================================================================
-fig_6a <- plot_MCS_final(counts_female, "(a) Female data")
-fig_6b <- plot_MCS_final(counts_male, "(b) Male data")
+fig_6a <- plot_MCS_final(counts_female, title_label = "")
+fig_6b <- plot_MCS_final(counts_male, title_label = "")
 
 ggsave(file.path(dir.p, "FigureD1a_Female_MCS.pdf"), plot = fig_6a, width = 7.5, height = 7)
 ggsave(file.path(dir.p, "FigureD1b_Male_MCS.pdf"), plot = fig_6b, width = 7.5, height = 7)

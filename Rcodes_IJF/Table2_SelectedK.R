@@ -1,5 +1,5 @@
 ###############################################################################
-# Script: Table2_selectedK.R
+# Script: Table2_SelectedK.R
 # Description: EVR Component Selection for UFTS, MFTS, MLFTS, and FANOVA
 #              Produces Table 2 (Selected K counts across forecasting horizons)
 ###############################################################################
