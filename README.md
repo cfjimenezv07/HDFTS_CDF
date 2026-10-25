@@ -105,7 +105,7 @@ After generating and storing the point and interval results in results/, run the
 - TableC1_ConformalAnalysis.R: Appendix C conformal prediction interval evaluation.
 
 #### Visualizations & Figures
-- Figure_1_and_3.R: Rainbow plots of subnational mortality distributions and Kullback–Leibler divergence heatmaps across prefectures (generates Figures 1 and 3 / outputs Fig_1a/b and Fig_2a–2f).
+- Figure_1_and_3.R: Rainbow plots of subnational mortality distributions and Kullback–Leibler divergence heatmaps across prefectures.
 - Figure_5_Heatmaps_point.R: Heatmaps comparing point forecast error metrics across prefectures and horizons.
 - Figure_6_Heatmaps_Interval.R: Heatmaps evaluating prediction interval performance (Coverage and Interval Score).
 - Figure_7_Example_Prediction_Intervals.R: Out-of-sample prediction interval visualizations for representative cases.

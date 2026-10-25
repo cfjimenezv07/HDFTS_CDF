@@ -97,19 +97,19 @@ for(iw in 1:length(state))
 rownames(female_KLdiv_year) = rownames(male_KLdiv_year) = rownames(total_KLdiv_year) = state
 colnames(female_KLdiv_year) = colnames(male_KLdiv_year) = colnames(total_KLdiv_year) = year
 
-savefig(file.path(dir.plots,"Fig_2a"), width = 12, height = 10, type = "png", toplines = 0.5)
+savefig(file.path(dir.plots,"Fig_3a"), width = 12, height = 10, type = "png", toplines = 0.5)
 image(year, 1:47, t(female_KLdiv_year[rev(1:47),]), xlab = "Year", ylab = "Prefecture", 
       zlim = c(0,0.16), main = "Female", yaxt = "n")
 axis(2, at = seq(10, 40, by = 10), labels = c(40, 30, 20, 10))
 dev.off()
 
-savefig(file.path(dir.plots,"Fig_2b"), width = 12, height = 10, type = "png", toplines = 0.5)
+savefig(file.path(dir.plots,"Fig_3b"), width = 12, height = 10, type = "png", toplines = 0.5)
 image(year, 1:47, t(male_KLdiv_year[rev(1:47),]),   xlab = "Year", ylab = "", 
       zlim = c(0,0.16), main = "Male",yaxt = "n")
 axis(2, at = seq(10, 40, by = 10), labels = c(40, 30, 20, 10))
 dev.off()
 
-savefig(file.path(dir.plots,"Fig_2c"), width = 12, height = 10, type = "png", toplines = 0.5)
+savefig(file.path(dir.plots,"Fig_3c"), width = 12, height = 10, type = "png", toplines = 0.5)
 image(year, 1:47, t(total_KLdiv_year[rev(1:47),]),  xlab = "Year", ylab = "", 
       zlim = c(0,0.16), main = "Total", yaxt = "n")
 axis(2, at = seq(10, 40, by = 10), labels = c(40, 30, 20, 10))
@@ -130,18 +130,18 @@ for(iw in 1:length(state))
 rownames(female_KLdiv_age) = rownames(male_KLdiv_age) = rownames(total_KLdiv_age) = state
 colnames(female_KLdiv_age) = colnames(male_KLdiv_age) = colnames(total_KLdiv_age) = 0:110
 
-savefig(file.path(dir.plots,"Fig_2d"), width = 12, height = 10, type = "png", toplines = 0.5)
+savefig(file.path(dir.plots,"Fig_3d"), width = 12, height = 10, type = "png", toplines = 0.5)
 image(0:110, 1:47, t(female_KLdiv_age[rev(1:47),]), xlab = "Age", ylab = "Prefecture", zlim = c(0, 1.26),
       yaxt = "n")
 axis(2, at = seq(10, 40, by = 10), labels = c(40, 30, 20, 10))
 dev.off()
 
-savefig(file.path(dir.plots,"Fig_2e"), width = 12, height = 10, type = "png", toplines = 0.5)
+savefig(file.path(dir.plots,"Fig_3e"), width = 12, height = 10, type = "png", toplines = 0.5)
 image(0:110, 1:47, t(male_KLdiv_age[rev(1:47),]),   xlab = "Age", ylab = "", zlim = c(0, 1.26), yaxt = "n")
 axis(2, at = seq(10, 40, by = 10), labels = c(40, 30, 20, 10))
 dev.off()
 
-savefig(file.path(dir.plots,"Fig_2f"), width = 12, height = 10, type = "png", toplines = 0.5)
+savefig(file.path(dir.plots,"Fig_3f"), width = 12, height = 10, type = "png", toplines = 0.5)
 image(0:110, 1:47, t(total_KLdiv_age[rev(1:47),]),  xlab = "Age", ylab = "", zlim = c(0, 1.26), yaxt = "n")
 axis(2, at = seq(10, 40, by = 10), labels = c(40, 30, 20, 10))
 dev.off()
