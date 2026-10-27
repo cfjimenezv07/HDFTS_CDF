@@ -974,7 +974,8 @@ forecast.hdfpca <- function(object, h, level, B)
   score <- list()
   for(im in 1:m) 
   {
-    score[[im]] <- sapply(score.fore, "[", ((im - 1) * h + 1):(im * h))
+     score[[im]] <- sapply(score.fore, "[", ((im - 1) * h + 1):(im * h))
+
   }
   fun.fore <- list()
   if(h == 1) 

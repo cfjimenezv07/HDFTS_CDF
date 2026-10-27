@@ -27,7 +27,7 @@ if (!dir.exists(dir.shiny2))  dir.create(dir.shiny2, recursive = TRUE)
 # 1. FUNCTION DEFINITION
 ###############################################################################
 
-# train_set: 1:16 | validation_set: 17:32 | test_set: 33:49
+# train_set: 1:16 | validation_set: 17:33 | test_set: 34:49
 interval_fore_subnational_cdf <- function(fdata, method_ncomp, horizon, fore_method, 
                                           uni_fore_method, level_sig, type_PI) 
 {
